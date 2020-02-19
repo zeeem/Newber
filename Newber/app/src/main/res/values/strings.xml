@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Newber</string>
-    <string name="login">login</string>
+    <string name="login">Login</string>
     <string name="loginFromSignUp">Already registered? LOGIN</string>
     <string name="signUpFromLogin">New user? SIGN UP</string>
-    <string name="full_name">Full Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="username">Username</string>
     <string name="phone_number">Phone Number</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>

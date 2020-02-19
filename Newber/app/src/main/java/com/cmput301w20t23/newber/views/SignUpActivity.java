@@ -60,7 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
         confirmPassword = ((EditText) (findViewById(R.id.confirmPasswordSignUp))).getText().toString();
 
         // if user inputs are valid
-        if (userController.isUserValid(firstName, lastName, username, phone, email, password, confirmPassword)) {
+        if (userController.isSignUpValid(firstName, lastName, username, phone, email, password, confirmPassword)) {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -68,7 +68,11 @@ public class SignUpActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d("MYTAG", "createUserWithEmail:success");
                         userController.createUser(firstName, lastName, username, phone, email);
-
+                        // transition to login screen after sign up
+                        Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
+                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(loginIntent);
+                        finish();
                     }
                     // if sign up email already exists or password does not meet minimum requirements
                     else {

@@ -15,10 +15,19 @@ public class UserController {
         this.databaseManager = new DatabaseManager(context);
     }
 
-    public boolean isUserValid(String firstName, String lastName, String username, String phone, String email, String password, String confirmPassword) {
+    public boolean isLoginValid(String email, String password) {
+        if ((email.trim()).length() == 0 | password.trim().length() == 0) {
+            Toast.makeText(context, "Please enter a username and password", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isSignUpValid(String firstName, String lastName, String username, String phone, String email, String password, String confirmPassword) {
         if ((email.trim()).length() == 0 | username.trim().length() == 0 |
                 phone.trim().length() == 0 | password.trim().length() == 0 |
-                confirmPassword.trim().length() == 0  | firstName.trim().length() == 0 |
+                confirmPassword.trim().length() == 0 | firstName.trim().length() == 0 |
                 lastName.trim().length() == 0){
             Toast.makeText(context, "Please enter all fields", Toast.LENGTH_SHORT).show();
             return false;
