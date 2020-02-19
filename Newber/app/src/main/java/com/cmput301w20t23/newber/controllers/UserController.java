@@ -24,12 +24,17 @@ public class UserController {
         return true;
     }
 
-    public boolean isSignUpValid(String firstName, String lastName, String username, String phone, String email, String password, String confirmPassword) {
-        if ((email.trim()).length() == 0 | username.trim().length() == 0 |
-                phone.trim().length() == 0 | password.trim().length() == 0 |
-                confirmPassword.trim().length() == 0 | firstName.trim().length() == 0 |
-                lastName.trim().length() == 0){
+    // check if all fields contain values in sign up form
+    public boolean isSignUpValid(String role, String firstName, String lastName, String username, String phone, String email, String password, String confirmPassword) {
+        if (firstName.trim().length() == 0 | lastName.trim().length() == 0 |
+                username.trim().length() == 0 | phone.trim().length() == 0 | email.trim().length() == 0 |
+                password.trim().length() == 0 | confirmPassword.trim().length() == 0) {
             Toast.makeText(context, "Please enter all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (role.trim().length() == 0) {
+            Toast.makeText(context, "Please select an account type", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -51,8 +56,8 @@ public class UserController {
         return true;
     }
 
-    public void createUser(String username, String firstName, String lastName, String phone, String email) {
-        databaseManager.createUniqueUser(username, firstName, lastName, phone, email);
+    public void createUser(String role, String firstName, String lastName, String username, String phone, String email) {
+        databaseManager.createUniqueUser(role, firstName, lastName, username, phone, email);
     }
 
 

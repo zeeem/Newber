@@ -23,7 +23,7 @@ public class DatabaseManager {
         this.mAuth = FirebaseAuth.getInstance();
     }
 
-    public void createUniqueUser(final String firstName, final String lastName, final String username, final String phone, final String email) {
+    public void createUniqueUser(final String role, final String firstName, final String lastName, final String username, final String phone, final String email) {
         FirebaseDatabase.getInstance().getReference("users").orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -33,7 +33,7 @@ public class DatabaseManager {
                 }
                 else {
                     FirebaseUser user = mAuth.getCurrentUser();
-                    User userObj = new User(firstName, lastName, username, phone, email, user.getUid());
+                    User userObj = new User(role, firstName, lastName, username, phone, email, user.getUid());
 
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

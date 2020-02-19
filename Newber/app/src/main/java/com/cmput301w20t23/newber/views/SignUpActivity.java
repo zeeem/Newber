@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,13 +24,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private UserController userController;
-    private String email;
-    private String password;
-    private String username;
-    private String phone;
-    private String confirmPassword;
+    private String role;
     private String firstName;
     private String lastName;
+    private String username;
+    private String phone;
+    private String email;
+    private String password;
+    private String confirmPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,12 @@ public class SignUpActivity extends AppCompatActivity {
     // sign up user, called if "Sign Up" button is clicked
     public void signUp(View view) {
 
+        // get selected radio button from group
+        int roleId = ((RadioGroup) findViewById(R.id.radioRole)).getCheckedRadioButtonId();
+
+        // if no radio button is clicked, assign empty string to role, otherwise assign button text
+        role = (roleId == -1) ? "" : ((RadioButton) (findViewById(roleId))).getText().toString();
+
         firstName = ((EditText) (findViewById(R.id.userFirstNameSignUp))).getText().toString();
         lastName = ((EditText) (findViewById(R.id.userLastNameSignUp))).getText().toString();
         username = ((EditText) (findViewById(R.id.usernameSignUp))).getText().toString();
@@ -60,14 +69,14 @@ public class SignUpActivity extends AppCompatActivity {
         confirmPassword = ((EditText) (findViewById(R.id.confirmPasswordSignUp))).getText().toString();
 
         // if user inputs are valid
-        if (userController.isSignUpValid(firstName, lastName, username, phone, email, password, confirmPassword)) {
+        if (userController.isSignUpValid(role, firstName, lastName, username, phone, email, password, confirmPassword)) {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     // if sign up email is unique and password meets minimum requirements
                     if (task.isSuccessful()) {
                         Log.d("MYTAG", "createUserWithEmail:success");
-                        userController.createUser(firstName, lastName, username, phone, email);
+                        userController.createUser(role, firstName, lastName, username, phone, email);
                         // transition to login screen after sign up
                         Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
                         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

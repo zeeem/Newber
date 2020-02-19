@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Newber</string>
-    <string name="login">Login</string>
-    <string name="loginFromSignUp">Already registered? LOGIN</string>
-    <string name="signUpFromLogin">New user? SIGN UP</string>
+
+    <string name="rider">Rider</string>
+    <string name="driver">Driver</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="username">Username</string>
@@ -11,4 +11,7 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="signUp">Sign Up</string>
+    <string name="loginFromSignUp">"Already registered? Click here to login"</string>
+    <string name="login">Login</string>
+    <string name="signUpFromLogin">"Don't have an account? Sign Up"</string>
 </resources>
