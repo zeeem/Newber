@@ -14,4 +14,6 @@
     <string name="loginFromSignUp">"Already registered? Click here to login"</string>
     <string name="login">Login</string>
     <string name="signUpFromLogin">"Don't have an account? Sign Up"</string>
+    <string name="profile">Profile</string>
+    <string name="rating">Rating</string>
 </resources>
