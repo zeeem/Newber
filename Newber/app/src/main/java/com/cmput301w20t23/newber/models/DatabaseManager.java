@@ -33,11 +33,15 @@ public class DatabaseManager {
                 }
                 else {
                     FirebaseUser user = mAuth.getCurrentUser();
-                    User userObj = new User(role, firstName, lastName, username, phone, email, user.getUid());
+                    User userObj = new User(firstName, lastName, username, phone, email, user.getUid());
 
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(userObj);
+
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("role").setValue(role);
 
                     Intent signedUpIntent = new Intent(context, MainActivity.class);
                     signedUpIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

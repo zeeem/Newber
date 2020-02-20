@@ -11,9 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="200dp"
+        android:layout_gravity="center"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
+
+        <ImageView
+            android:layout_width="199dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/logo">
+
+        </ImageView>
 
         <EditText
             android:id="@+id/emailLogin"
