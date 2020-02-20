@@ -43,6 +43,12 @@ public class DatabaseManager {
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .child("role").setValue(role);
 
+                    if (role.equals("Driver")) {
+                        FirebaseDatabase.getInstance().getReference("drivers")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .setValue(new Rating(0, 0));
+                    }
+
                     Intent signedUpIntent = new Intent(context, MainActivity.class);
                     signedUpIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(signedUpIntent);

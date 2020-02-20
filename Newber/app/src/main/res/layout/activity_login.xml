@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            android:inputType="textEmailAddress"
+            android:inputType="textPassword"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
             android:backgroundTint="@color/colorWhite"/>
