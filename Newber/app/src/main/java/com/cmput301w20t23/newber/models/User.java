@@ -1,7 +1,6 @@
 package com.cmput301w20t23.newber.models;
 
 public class User {
-    private String role;
     private String firstName;
     private String lastName;
     private String username;

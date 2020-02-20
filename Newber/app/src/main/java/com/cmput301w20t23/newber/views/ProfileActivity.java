@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private UserController userController;
-    private String role = "";
+    private String role;
     private TextView fullName;
     private TextView username;
     private TextView phone;

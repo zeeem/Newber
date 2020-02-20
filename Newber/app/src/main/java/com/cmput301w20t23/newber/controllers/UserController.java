@@ -1,16 +1,19 @@
 package com.cmput301w20t23.newber.controllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Patterns;
 import android.widget.Toast;
 
-import com.cmput301w20t23.newber.models.DatabaseManager;
 import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.Rider;
+import com.cmput301w20t23.newber.models.User;
+import com.cmput301w20t23.newber.views.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -19,13 +22,11 @@ import androidx.annotation.NonNull;
 public class UserController {
     private Context context;
     private FirebaseAuth mAuth;
-    private DatabaseManager databaseManager;
     private Rider rider;
 
     public UserController(Context context) {
         this.context = context;
         this.mAuth = FirebaseAuth.getInstance();
-        this.databaseManager = new DatabaseManager(context);
     }
 
     public boolean isLoginValid(String email, String password) {
@@ -33,7 +34,6 @@ public class UserController {
             Toast.makeText(context, "Please enter a username and password", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 
@@ -69,8 +69,43 @@ public class UserController {
         return true;
     }
 
-    public void createUser(String role, String firstName, String lastName, String username, String phone, String email) {
-        databaseManager.createUniqueUser(role, firstName, lastName, username, phone, email);
+    public void createUser(final String role, final String firstName, final String lastName, final String username, final String phone, final String email) {
+        FirebaseDatabase.getInstance().getReference("users").orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.exists()) {
+                    Toast.makeText(context, "Username has already been taken", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    User userObj = new User(firstName, lastName, username, phone, email, user.getUid());
+
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .setValue(userObj);
+
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("role").setValue(role);
+
+                    // if the user to be created is a driver, create upvotes and downvotes fields in database
+                    if (role.equals("Driver")) {
+                        FirebaseDatabase.getInstance().getReference("drivers")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .setValue(new Rating(0, 0));
+                    }
+
+                    Intent signedUpIntent = new Intent(context, MainActivity.class);
+                    signedUpIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(signedUpIntent);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public Rider getRiderProfileInfo() {
