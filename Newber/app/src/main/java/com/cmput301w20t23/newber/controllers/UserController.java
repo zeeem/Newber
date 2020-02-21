@@ -3,8 +3,10 @@ package com.cmput301w20t23.newber.controllers;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Patterns;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cmput301w20t23.newber.models.DataListener;
 import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.Rider;
@@ -23,6 +25,7 @@ public class UserController {
     private Context context;
     private FirebaseAuth mAuth;
     private Rider rider;
+    private Driver driver;
 
     public UserController(Context context) {
         this.context = context;
@@ -108,31 +111,34 @@ public class UserController {
         });
     }
 
-    public Rider getRiderProfileInfo() {
+    public void getRiderProfileInfo(final DataListener dataListener) {
+        dataListener.onStart();
         FirebaseDatabase.getInstance().getReference("users")
                 .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                rider = new Rider(
-                        dataSnapshot.child("firstName").getValue(String.class),
-                        dataSnapshot.child("lastName").getValue(String.class),
-                        dataSnapshot.child("username").getValue(String.class),
-                        dataSnapshot.child("phone").getValue(String.class),
-                        dataSnapshot.child("email").getValue(String.class),
-                        mAuth.getCurrentUser().getUid()
-                );
+                dataListener.onSuccess(dataSnapshot);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                rider = null;
+                dataListener.onFailure();
             }
         });
-
-        return rider;
     }
 
-    public Driver getDriverProfileInfo() {
-        return null;
+    public void getDriverProfileInfo(final DataListener dataListener) {
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataListener.onSuccess(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                dataListener.onFailure();
+            }
+        });
     }
 }
