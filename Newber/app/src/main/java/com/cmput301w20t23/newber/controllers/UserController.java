@@ -141,4 +141,19 @@ public class UserController {
             }
         });
     }
+
+    public void getDriverRatingInfo(final DataListener dataListener) {
+        FirebaseDatabase.getInstance().getReference("drivers")
+                .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataListener.onSuccess(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                dataListener.onFailure();
+            }
+        });
+    }
 }

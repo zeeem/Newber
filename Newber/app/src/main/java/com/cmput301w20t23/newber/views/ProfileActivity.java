@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
@@ -21,10 +23,17 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private UserController userController;
+
     private TextView fullName;
     private TextView username;
     private TextView phone;
     private TextView email;
+
+    private TextView ratingLabel;
+    private LinearLayout ratingLayout;
+    private TextView upvotes;
+    private TextView downvotes;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +80,13 @@ public class ProfileActivity extends AppCompatActivity {
                         });
                         break;
                     case "Driver":
+                        ratingLabel = findViewById(R.id.ratingLabel);
+                        ratingLayout = findViewById(R.id.ratingLayout);
+                        ratingLabel.setVisibility(View.VISIBLE);
+                        ratingLayout.setVisibility(View.VISIBLE);
+                        upvotes = findViewById(R.id.upvotes);
+                        downvotes = findViewById(R.id.downvotes);
+
                         userController.getDriverProfileInfo(new DataListener() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
@@ -90,6 +106,25 @@ public class ProfileActivity extends AppCompatActivity {
                                 Log.d("onFailure", "loadProfileFailed");
                             }
                         });
+
+                        userController.getDriverRatingInfo(new DataListener() {
+                            @Override
+                            public void onSuccess(DataSnapshot dataSnapshot) {
+                                upvotes.setText(Long.valueOf((long) dataSnapshot.child("upvotes").getValue()).toString());
+                                downvotes.setText(Long.valueOf((long) dataSnapshot.child("downvotes").getValue()).toString());
+                            }
+
+                            @Override
+                            public void onStart() {
+                                Log.d("onStart", "loadRatingStarted");
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                Log.d("onFailure", "loadRatingFailed");
+                            }
+                        });
+
                         break;
                 }
             }

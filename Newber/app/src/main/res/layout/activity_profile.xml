@@ -64,10 +64,50 @@
         android:textColor="@color/colorBlack"/>
 
     <TextView
+        android:id="@+id/ratingLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/rating"
         android:textSize="15sp"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/ratingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_thumb_up_green_24dp">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/upvotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_thumb_down_red_24dp">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/downvotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"/>
+    </LinearLayout>
 
 </LinearLayout>
