@@ -2,6 +2,7 @@ package com.cmput301w20t23.newber.controllers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,14 +13,22 @@ import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
 import com.cmput301w20t23.newber.views.MainActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
+
+import static android.content.ContentValues.TAG;
 
 public class UserController {
     private Context context;
@@ -155,5 +164,64 @@ public class UserController {
                 dataListener.onFailure();
             }
         });
+    }
+
+    public boolean isContactInfoValid(String email, String phone) {
+        if (phone.trim().length() == 0 | email.trim().length() == 0) {
+            Toast.makeText(context, "Please enter all fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!phone.matches("^[+]?[0-9]{10,13}$")) {
+            Toast.makeText(context, "Please enter a valid phone number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(context, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    public void saveContactInfo(final Context context, final String email, String phone, String password) {
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users")
+                .child(mAuth.getCurrentUser().getUid());
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // current credential
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(user.getEmail(), password);
+
+        // re-authenticate with new credentials
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "User re-authenticated.");
+                        // update email
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.updateEmail(email)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            ref.child("email").setValue(email);
+                                            Log.d(TAG, "User email address updated.");
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(context, "Password incorrect. Email could not be updated.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                });
+
+        ref.child("phone").setValue(phone);
     }
 }

@@ -16,4 +16,6 @@
     <string name="signUpFromLogin">"Don't have an account? Sign Up"</string>
     <string name="profile">Profile</string>
     <string name="rating">Rating</string>
+    <string name="edit">Edit</string>
+    <string name="logout">Logout</string>
 </resources>
