@@ -81,6 +81,10 @@ public class UserController {
         return true;
     }
 
+    public void logout() {
+        mAuth.signOut();
+    }
+
     public void createUser(final String role, final String firstName, final String lastName, final String username, final String phone, final String email) {
         FirebaseDatabase.getInstance().getReference("users").orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
