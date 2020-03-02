@@ -6,9 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -143,7 +147,33 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void edit(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // options menu contains buttons for editing contact info and logging out
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.profile_options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit:
+                // edit contact info
+                edit();
+                return true;
+
+            case R.id.logout:
+                // log out
+                logout();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void edit() {
         AlertDialog.Builder editDialogBuilder = new AlertDialog.Builder(this);
         editDialogBuilder.setTitle("Edit Contact Information");
         LayoutInflater inflater = this.getLayoutInflater();
@@ -192,7 +222,10 @@ public class ProfileActivity extends AppCompatActivity {
         editDialog.show();
     }
 
-    public void logout(View view) {
-        // TODO: implement logout
+    public void logout() {
+        userController.logout();
+        Intent i = new Intent(this, LoginActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(i);
     }
 }
