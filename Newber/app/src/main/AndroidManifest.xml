@@ -11,17 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.RiderRequestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".views.LoginActivity">
         </activity>
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAGmBxEjzU68YpgCNWsldO73dFcwnj0BT8" />
 
         <activity
             android:name=".views.ProfileActivity"
@@ -30,13 +22,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.MainActivity" />
         </activity>
-        <activity android:name=".views.LoginActivity"></activity>
+
         <activity
             android:name=".views.MainActivity"
             android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".views.SignUpActivity" />
+
+        <activity android:name=".views.RiderRequestActivity">
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAGmBxEjzU68YpgCNWsldO73dFcwnj0BT8" />
     </application>
 
 </manifest>
