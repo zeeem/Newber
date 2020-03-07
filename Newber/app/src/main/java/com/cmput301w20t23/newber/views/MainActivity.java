@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,21 +26,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Fragment riderFragment = null;
+        TextView statusBanner = findViewById(R.id.main_status_banner);
 
         if (currRequest == null) {
             // if no current request, use "no current request" fragment
+            statusBanner.setText("No Request");
+            statusBanner.setBackgroundColor(Color.LTGRAY);
             riderFragment = new RiderRequestNoneFragment();
         }
         else {
             switch (currRequest.getStatus()) {
                 case PENDING:
-                    riderFragment = new RiderRequestPendingFragment();
+                    statusBanner.setText("Requested");
+                    statusBanner.setBackgroundColor(Color.RED);
                 case OFFERED:
+                    statusBanner.setText("Offered");
+                    statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
                 case ACCEPTED:
+                    statusBanner.setText("Accepted");
+                    statusBanner.setBackgroundColor(Color.GREEN);
                 case IN_PROGRESS:
+                    statusBanner.setText("In Progress");
+                    statusBanner.setBackgroundColor(Color.YELLOW);
                 case COMPLETED:
-                default:
-                    riderFragment = new RiderRequestNoneFragment();
+                    statusBanner.setText("Completed");
+                    statusBanner.setBackgroundColor(Color.CYAN);
             }
         }
 
