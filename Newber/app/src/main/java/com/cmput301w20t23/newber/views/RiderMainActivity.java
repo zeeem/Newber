@@ -1,5 +1,6 @@
 package com.cmput301w20t23.newber.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -7,18 +8,28 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.controllers.UserController;
+import com.cmput301w20t23.newber.models.DataListener;
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class RiderMainActivity extends AppCompatActivity {
-
-    RideRequest currRequest = null;
+    RideRequest currRequest;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +50,11 @@ public class RiderMainActivity extends AppCompatActivity {
                 case PENDING:
                     statusBanner.setText("Requested");
                     statusBanner.setBackgroundColor(Color.RED);
+                    riderFragment = new RiderRequestPendingFragment(currRequest);
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
+                    riderFragment = new RiderRequestOfferedFragment(currRequest);
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
                     statusBanner.setBackgroundColor(Color.GREEN);
