@@ -9,24 +9,30 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.models.RideRequest;
 
-public class RiderRequestNoneFragment extends Fragment {
+public class RiderRequestPendingFragment extends Fragment {
+
+    private RideRequest rideRequest;
+
+    public RiderRequestPendingFragment(RideRequest request) {
+        rideRequest = request;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflater of layout for this fragment
-        View view = inflater.inflate(R.layout.rider_no_request_fragment, container, false);
+        View view = inflater.inflate(R.layout.rider_pending_fragment, container, false);
 
-        Button createRequestButton = view.findViewById(R.id.rider_create_request_button);
+        Button cancelRequestButton = view.findViewById(R.id.rider_pending_request_button);
 
-        createRequestButton.setOnClickListener(new View.OnClickListener()
+        cancelRequestButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(getActivity(), RiderRequestActivity.class);
-                startActivity(intent);
+                // TODO: remove request from firebase
             }
         });
         return view;
