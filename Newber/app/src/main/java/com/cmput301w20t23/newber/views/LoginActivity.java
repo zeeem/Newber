@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,8 +47,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(View view) {
 
-        email = ((EditText)(findViewById(R.id.emailLogin))).getText().toString();
-        password = ((EditText)(findViewById(R.id.passwordLogin))).getText().toString();
+        email = ((EditText)(findViewById(R.id.email_login))).getText().toString();
+        password = ((EditText)(findViewById(R.id.password_login))).getText().toString();
 
         // if user has input values in both email and password fields
         if (userController.isLoginValid(email, password)) {
@@ -69,11 +68,11 @@ public class LoginActivity extends AppCompatActivity {
                     // if login was unsuccessful
                     else {
                         Log.w("MYTAG", "signInWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Incorrect username or password",
+                        Toast.makeText(LoginActivity.this, "Invalid credentials",
                                 Toast.LENGTH_SHORT).show();
                         // clear email and password fields
-                        ((EditText)(findViewById(R.id.emailLogin))).setText("");
-                        ((EditText)(findViewById(R.id.passwordLogin))).setText("");
+                        ((EditText)(findViewById(R.id.email_login))).setText("");
+                        ((EditText)(findViewById(R.id.password_login))).setText("");
                     }
                 }
             });

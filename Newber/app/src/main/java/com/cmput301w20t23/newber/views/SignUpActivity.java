@@ -55,18 +55,18 @@ public class SignUpActivity extends AppCompatActivity {
     public void signUp(View view) {
 
         // get selected radio button from group
-        int roleId = ((RadioGroup) findViewById(R.id.radioRole)).getCheckedRadioButtonId();
+        int roleId = ((RadioGroup) findViewById(R.id.radio_role)).getCheckedRadioButtonId();
 
         // if no radio button is clicked, assign empty string to role, otherwise assign button text
         role = (roleId == -1) ? "" : ((RadioButton) (findViewById(roleId))).getText().toString();
 
-        firstName = ((EditText) (findViewById(R.id.userFirstNameSignUp))).getText().toString();
-        lastName = ((EditText) (findViewById(R.id.userLastNameSignUp))).getText().toString();
-        username = ((EditText) (findViewById(R.id.usernameSignUp))).getText().toString();
-        phone = ((EditText) (findViewById(R.id.phoneSignUp))).getText().toString();
-        email = ((EditText) (findViewById(R.id.emailSignUp))).getText().toString();
-        password = ((EditText) (findViewById(R.id.passwordSignUp))).getText().toString();
-        confirmPassword = ((EditText) (findViewById(R.id.confirmPasswordSignUp))).getText().toString();
+        firstName = ((EditText) (findViewById(R.id.user_first_name_sign_up))).getText().toString();
+        lastName = ((EditText) (findViewById(R.id.user_last_name_sign_up))).getText().toString();
+        username = ((EditText) (findViewById(R.id.username_sign_up))).getText().toString();
+        phone = ((EditText) (findViewById(R.id.phone_sign_up))).getText().toString();
+        email = ((EditText) (findViewById(R.id.email_sign_up))).getText().toString();
+        password = ((EditText) (findViewById(R.id.password_sign_up))).getText().toString();
+        confirmPassword = ((EditText) (findViewById(R.id.confirm_password_sign_up))).getText().toString();
 
         // if user inputs are valid
         if (userController.isSignUpValid(role, firstName, lastName, username, phone, email, password, confirmPassword)) {

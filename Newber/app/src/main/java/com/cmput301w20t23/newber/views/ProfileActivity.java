@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,13 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.DataListener;
-import com.cmput301w20t23.newber.models.Rider;
-import com.cmput301w20t23.newber.models.Driver;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         userController = new UserController(this);
 
-        fullName = findViewById(R.id.fullName);
+        fullName = findViewById(R.id.full_name);
         username = findViewById(R.id.username);
         phone = findViewById(R.id.phone);
         email = findViewById(R.id.email);
@@ -92,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
                         break;
                     case "Driver":
                         ratingLabel = findViewById(R.id.ratingLabel);
-                        ratingLayout = findViewById(R.id.ratingLayout);
+                        ratingLayout = findViewById(R.id.rating_layout);
                         ratingLabel.setVisibility(View.VISIBLE);
                         ratingLayout.setVisibility(View.VISIBLE);
                         upvotes = findViewById(R.id.upvotes);
@@ -180,9 +176,9 @@ public class ProfileActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.profile_dialog, null);
         editDialogBuilder.setView(dialogView);
 
-        final EditText emailInput = (EditText) dialogView.findViewById(R.id.emailInput);
-        final EditText phoneInput = (EditText) dialogView.findViewById(R.id.phoneInput);
-        final EditText passwordInput = (EditText) dialogView.findViewById(R.id.passwordInput);
+        final EditText emailInput = (EditText) dialogView.findViewById(R.id.email_input);
+        final EditText phoneInput = (EditText) dialogView.findViewById(R.id.phone_input);
+        final EditText passwordInput = (EditText) dialogView.findViewById(R.id.password_input);
         emailInput.setText(email.getText());
         phoneInput.setText(phone.getText());
 

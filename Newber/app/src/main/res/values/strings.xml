@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Newber</string>
-
+    <string name="API_KEY">AIzaSyAGmBxEjzU68YpgCNWsldO73dFcwnj0BT8</string>
     <string name="rider">Rider</string>
     <string name="driver">Driver</string>
     <string name="first_name">First Name</string>
@@ -10,10 +10,10 @@
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="signUp">Sign Up</string>
-    <string name="loginFromSignUp">"Already registered? Click here to login"</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login_from_sign_up">Already registered? <u>Login</u></string>
     <string name="login">Login</string>
-    <string name="signUpFromLogin">"Don't have an account? Sign Up"</string>
+    <string name="sign_up_from_login">Don\'t have an account? <u>Sign Up</u></string>
     <string name="profile">Profile</string>
     <string name="rating">Rating</string>
     <string name="edit">Edit</string>

@@ -7,7 +7,7 @@
     >
 
     <EditText
-        android:id="@+id/emailInput"
+        android:id="@+id/email_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/email_address"
@@ -17,7 +17,7 @@
     </EditText>
 
     <EditText
-        android:id="@+id/phoneInput"
+        android:id="@+id/phone_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/phone_number"
@@ -27,7 +27,7 @@
     </EditText>
 
     <EditText
-        android:id="@+id/passwordInput"
+        android:id="@+id/password_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/confirm_password"
