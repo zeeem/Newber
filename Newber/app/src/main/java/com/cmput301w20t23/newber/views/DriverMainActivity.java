@@ -36,9 +36,6 @@ public class DriverMainActivity extends AppCompatActivity {
         }
         else {
             switch (currRequest.getStatus()) {
-                case PENDING:
-                    statusBanner.setText("Requested");
-                    statusBanner.setBackgroundColor(Color.RED);
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
