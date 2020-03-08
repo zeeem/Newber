@@ -78,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.d("MYTAG", "createUserWithEmail:success");
                         userController.createUser(role, firstName, lastName, username, phone, email);
                         // transition to main screen after sign up
-                        Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+                        Intent mainIntent = new Intent(getBaseContext(), RiderMainActivity.class);
                         mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(mainIntent);
                         finish();

@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("MYTAG", "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         // transition to main screen after log in
-                        Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+                        Intent mainIntent = new Intent(getBaseContext(), RiderMainActivity.class);
                         mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(mainIntent);
                         finish();
