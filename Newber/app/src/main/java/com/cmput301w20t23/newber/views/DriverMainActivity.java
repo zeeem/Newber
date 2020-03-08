@@ -16,14 +16,14 @@ import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 
-public class MainActivity extends AppCompatActivity {
+public class DriverMainActivity extends AppCompatActivity {
 
     RideRequest currRequest = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_driver);
 
         Fragment riderFragment = null;
         TextView statusBanner = findViewById(R.id.main_status_banner);
