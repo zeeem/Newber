@@ -5,11 +5,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.UserController;
+import com.cmput301w20t23.newber.models.DataListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,22 +32,46 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
-        // hide action bar
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        super.onCreate(savedInstanceState);
 
-        userController = new UserController(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // check if user is already logged in
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            FirebaseDatabase.getInstance().getReference("users")
+                    .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String role = dataSnapshot.child("role").getValue(String.class);
+                    System.out.println(role);
+
+                    switch (role) {
+                        case "Rider":
+                            Intent riderIntent = new Intent(LoginActivity.this, RiderMainActivity.class);
+                            startActivity(riderIntent);
+                            break;
+                        case "Driver":
+                            Intent driverIntent = new Intent(LoginActivity.this, DriverMainActivity.class);
+                            startActivity(driverIntent);
+                            break;
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        else {
+            setContentView(R.layout.activity_login);
+
+            // hide action bar
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
+
+            userController = new UserController(this);
+        }
     }
 
     public void login(View view) {
