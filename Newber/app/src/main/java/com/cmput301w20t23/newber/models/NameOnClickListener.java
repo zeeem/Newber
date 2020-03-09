@@ -1,7 +1,10 @@
-package com.cmput301w20t23.newber.controllers;
+package com.cmput301w20t23.newber.models;
 
 import android.view.View;
 
+/**
+ * This class listens for a user's name to be clicked and brings up the user profile
+ */
 public class NameOnClickListener implements View.OnClickListener {
     String role;
     public NameOnClickListener(String role) {

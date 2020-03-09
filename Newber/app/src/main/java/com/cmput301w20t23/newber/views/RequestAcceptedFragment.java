@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
-import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.models.NameOnClickListener;
 import com.cmput301w20t23.newber.models.RideRequest;
 
 import androidx.fragment.app.Fragment;
@@ -31,48 +31,64 @@ public class RequestAcceptedFragment extends Fragment {
         // View for this fragment
         View view = inflater.inflate(R.layout.accepted_fragment, container, false);
 
-        // Get layout components
+        // Get view elements
+        TextView pickupLocationTextView = view.findViewById(R.id.pickup_location);
+        TextView dropoffLocationTextView = view.findViewById(R.id.dropoff_location);
+        TextView fareTextView = view.findViewById(R.id.ride_fare);
         TextView name = view.findViewById(R.id.rider_main_driver_name);
         TextView phone = view.findViewById(R.id.rider_main_driver_phone);
         TextView email = view.findViewById(R.id.rider_main_driver_email);
         Button button = view.findViewById(R.id.request_accepted_button);
 
-        // Set values of info box
-        name.setText(rideRequest.getDriver().getFirstName() + rideRequest.getDriver().getLastName());
-        phone.setText(rideRequest.getDriver().getPhone());
-        email.setText(rideRequest.getDriver().getEmail());
+        // Set view elements
+        pickupLocationTextView.setText(rideRequest.getStart().getName());
+        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        fareTextView.setText(Double.toString(rideRequest.getCost()));
 
-        // Change button based on role
+        // Change UI based on role
         switch(role)
         {
             case "Rider": // Cancel button
                 button.setBackgroundColor(Color.LTGRAY);
                 button.setText("Cancel");
+
+                // Set values of info box
+                name.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
+                phone.setText(rideRequest.getDriver().getPhone());
+                email.setText(rideRequest.getDriver().getEmail());
+
+                button.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        // TODO: If rider, remove driver from request and set status to PENDING
+                    }
+                });
                 break;
+
             case "Driver": // Rider Picked Up button
                 button.setBackgroundColor(Color.YELLOW);
                 button.setText("Rider picked up");
+
+                // Set values of info box
+                name.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
+                phone.setText(rideRequest.getRider().getPhone());
+                email.setText(rideRequest.getRider().getEmail());
+
+                button.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        // TODO: If driver, set request status to IN_PROGRESS
+                    }
+                });
                 break;
         }
 
         // Bring up profile when name is clicked
         name.setOnClickListener(new NameOnClickListener(role));
-
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                switch(role) {
-                    case "Rider":
-                        // TODO: If rider, remove driver from request and set status to PENDING
-                        break;
-                    case "Driver":
-                        // TODO: If driver, set request status to IN_PROGRESS
-                        break;
-                }
-            }
-        });
 
         return view;
     }
