@@ -14,17 +14,15 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.RideRequest;
-import com.cmput301w20t23.newber.models.User;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class RiderMainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     RideRequest currRequest; // To be updated when querying db
     String role = "Rider"; // To be updated when querying db
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_rider);
+        setContentView(R.layout.activity_main);
 
         // TODO: Get from DB current user and current ride request and save as local objects
 
