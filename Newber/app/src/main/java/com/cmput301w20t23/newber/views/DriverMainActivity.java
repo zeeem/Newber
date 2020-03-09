@@ -19,6 +19,7 @@ import com.cmput301w20t23.newber.models.RideRequest;
 public class DriverMainActivity extends AppCompatActivity {
 
     RideRequest currRequest = null;
+    String role = "Driver";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class DriverMainActivity extends AppCompatActivity {
             // if no current request, use "no current request" fragment
             statusBanner.setText("No Request");
             statusBanner.setBackgroundColor(Color.LTGRAY);
-            riderFragment = new RiderRequestNoneFragment();
+            riderFragment = new NoRequestFragment(role);
         }
         else {
             switch (currRequest.getStatus()) {
