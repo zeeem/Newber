@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.UserController;
-import com.cmput301w20t23.newber.models.DataListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
 
         FirebaseDatabase.getInstance().getReference("users")
-                .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                .child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String role = dataSnapshot.child("role").getValue(String.class);
@@ -66,25 +64,10 @@ public class ProfileActivity extends AppCompatActivity {
 
                 switch (role) {
                     case "Rider":
-                        userController.getRiderProfileInfo(new DataListener() {
-                            @Override
-                            public void onSuccess(DataSnapshot dataSnapshot) {
-                                fullName.setText(dataSnapshot.child("firstName").getValue(String.class) + " " + dataSnapshot.child("lastName").getValue(String.class));
-                                username.setText(dataSnapshot.child("username").getValue(String.class));
-                                phone.setText(dataSnapshot.child("phone").getValue(String.class));
-                                email.setText(dataSnapshot.child("email").getValue(String.class));
-                            }
-
-                            @Override
-                            public void onStart() {
-                                Log.d("onStart", "loadProfileStarted");
-                            }
-
-                            @Override
-                            public void onFailure() {
-                                Log.d("onFailure", "loadProfileFailed");
-                            }
-                        });
+                        fullName.setText(dataSnapshot.child("firstName").getValue(String.class) + " " + dataSnapshot.child("lastName").getValue(String.class));
+                        username.setText(dataSnapshot.child("username").getValue(String.class));
+                        phone.setText(dataSnapshot.child("phone").getValue(String.class));
+                        email.setText(dataSnapshot.child("email").getValue(String.class));
                         break;
                     case "Driver":
                         ratingLabel = findViewById(R.id.ratingLabel);
@@ -94,43 +77,12 @@ public class ProfileActivity extends AppCompatActivity {
                         upvotes = findViewById(R.id.upvotes);
                         downvotes = findViewById(R.id.downvotes);
 
-                        userController.getDriverProfileInfo(new DataListener() {
-                            @Override
-                            public void onSuccess(DataSnapshot dataSnapshot) {
-                                fullName.setText(dataSnapshot.child("firstName").getValue(String.class) + " " + dataSnapshot.child("lastName").getValue(String.class));
-                                username.setText(dataSnapshot.child("username").getValue(String.class));
-                                phone.setText(dataSnapshot.child("phone").getValue(String.class));
-                                email.setText(dataSnapshot.child("email").getValue(String.class));
-                            }
+                        fullName.setText(dataSnapshot.child("firstName").getValue(String.class) + " " + dataSnapshot.child("lastName").getValue(String.class));
+                        username.setText(dataSnapshot.child("username").getValue(String.class));
+                        phone.setText(dataSnapshot.child("phone").getValue(String.class));
+                        email.setText(dataSnapshot.child("email").getValue(String.class));
 
-                            @Override
-                            public void onStart() {
-                                Log.d("onStart", "loadProfileStarted");
-                            }
-
-                            @Override
-                            public void onFailure() {
-                                Log.d("onFailure", "loadProfileFailed");
-                            }
-                        });
-
-                        userController.getDriverRatingInfo(new DataListener() {
-                            @Override
-                            public void onSuccess(DataSnapshot dataSnapshot) {
-                                upvotes.setText(Long.valueOf((long) dataSnapshot.child("upvotes").getValue()).toString());
-                                downvotes.setText(Long.valueOf((long) dataSnapshot.child("downvotes").getValue()).toString());
-                            }
-
-                            @Override
-                            public void onStart() {
-                                Log.d("onStart", "loadRatingStarted");
-                            }
-
-                            @Override
-                            public void onFailure() {
-                                Log.d("onFailure", "loadRatingFailed");
-                            }
-                        });
+                        loadRatings();
 
                         break;
                 }
@@ -167,6 +119,21 @@ public class ProfileActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void loadRatings() {
+        FirebaseDatabase.getInstance().getReference("drivers")
+                .child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                upvotes.setText(Long.valueOf((long) dataSnapshot.child("upvotes").getValue()).toString());
+                downvotes.setText(Long.valueOf((long) dataSnapshot.child("downvotes").getValue()).toString());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void edit() {
@@ -206,8 +173,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                         if (userController.isContactInfoValid(newEmail, newPhone)) {
                             userController.saveContactInfo(ProfileActivity.this, newEmail, newPhone, password);
-                            email.setText(newEmail);
-                            phone.setText(newPhone);
                             dialog.dismiss();
                         }
                     }
