@@ -6,7 +6,6 @@ import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
-import com.cmput301w20t23.newber.models.DataListener;
 import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.Rider;
@@ -14,6 +13,7 @@ import com.cmput301w20t23.newber.models.User;
 import com.cmput301w20t23.newber.views.RiderMainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -123,52 +123,6 @@ public class UserController {
         });
     }
 
-    public void getRiderProfileInfo(final DataListener dataListener) {
-        dataListener.onStart();
-        FirebaseDatabase.getInstance().getReference("users")
-                .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataListener.onSuccess(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                dataListener.onFailure();
-            }
-        });
-    }
-
-    public void getDriverProfileInfo(final DataListener dataListener) {
-        FirebaseDatabase.getInstance().getReference("users")
-                .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataListener.onSuccess(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                dataListener.onFailure();
-            }
-        });
-    }
-
-    public void getDriverRatingInfo(final DataListener dataListener) {
-        FirebaseDatabase.getInstance().getReference("drivers")
-                .child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataListener.onSuccess(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                dataListener.onFailure();
-            }
-        });
-    }
-
     public boolean isContactInfoValid(String email, String phone) {
         if (phone.trim().length() == 0 | email.trim().length() == 0) {
             Toast.makeText(context, "Please enter all fields", Toast.LENGTH_SHORT).show();
@@ -198,11 +152,10 @@ public class UserController {
         AuthCredential credential = EmailAuthProvider
                 .getCredential(user.getEmail(), password);
 
-        // re-authenticate with new credentials
         user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    public void onSuccess(Void aVoid) {
                         Log.d(TAG, "User re-authenticated.");
                         // update email
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -215,16 +168,15 @@ public class UserController {
                                             Log.d(TAG, "User email address updated.");
                                         }
                                     }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(context, "Password incorrect. Email could not be updated.", Toast.LENGTH_SHORT).show();
-                                    }
                                 });
                     }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Password incorrect. Email could not be updated.", Toast.LENGTH_SHORT).show();
+                    }
                 });
-
         ref.child("phone").setValue(phone);
     }
 }
