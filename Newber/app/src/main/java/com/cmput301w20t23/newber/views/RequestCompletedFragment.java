@@ -26,22 +26,31 @@ public class RequestCompletedFragment extends Fragment {
         // Inflater of layout for this fragment
         View view = inflater.inflate(R.layout.completed_fragment, container, false);
 
-        TextView name = view.findViewById(R.id.rider_main_driver_name);
-        TextView phone = view.findViewById(R.id.rider_main_driver_phone);
-        TextView email = view.findViewById(R.id.rider_main_driver_email);
+        // Get view elements
+        TextView pickupLocationTextView = view.findViewById(R.id.pickup_location);
+        TextView dropoffLocationTextView = view.findViewById(R.id.dropoff_location);
+        TextView fareTextView = view.findViewById(R.id.ride_fare);
+        TextView nameTextView = view.findViewById(R.id.rider_main_driver_name);
+        TextView phoneTextView = view.findViewById(R.id.rider_main_driver_phone);
+        TextView emailTextView = view.findViewById(R.id.rider_main_driver_email);
+        Button completeRequestButton = view.findViewById(R.id.rider_complete_ride_button);
+
+        // Set view elements
+        pickupLocationTextView.setText(rideRequest.getStart().getName());
+        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Set driver box information
-        name.setText(rideRequest.getDriver().getFirstName() + rideRequest.getDriver().getLastName());
-        phone.setText(rideRequest.getDriver().getPhone());
-        email.setText(rideRequest.getDriver().getEmail());
+        nameTextView.setText(rideRequest.getDriver().getFirstName() + rideRequest.getDriver().getLastName());
+        phoneTextView.setText(rideRequest.getDriver().getPhone());
+        emailTextView.setText(rideRequest.getDriver().getEmail());
 
-        Button completeRequestButton = view.findViewById(R.id.rider_complete_ride_button);
         completeRequestButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                // TODO: remove request from firebase user and requests table
+                // TODO: remove request from firebase user and the requests table
             }
         });
         return view;

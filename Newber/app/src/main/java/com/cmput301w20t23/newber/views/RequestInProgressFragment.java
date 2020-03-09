@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
-import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.models.NameOnClickListener;
 import com.cmput301w20t23.newber.models.RideRequest;
 
 import androidx.fragment.app.Fragment;
@@ -30,43 +30,51 @@ public class RequestInProgressFragment extends Fragment {
         // View for this fragment
         View view = inflater.inflate(R.layout.in_progress_fragment, container, false);
 
-        TextView name = view.findViewById(R.id.rider_main_driver_name);
-        TextView phone = view.findViewById(R.id.rider_main_driver_phone);
-        TextView email = view.findViewById(R.id.rider_main_driver_email);
-
+        // Get view elements
+        TextView pickupLocationTextView = view.findViewById(R.id.pickup_location);
+        TextView dropoffLocationTextView = view.findViewById(R.id.dropoff_location);
+        TextView fareTextView = view.findViewById(R.id.ride_fare);
+        TextView nameTextView = view.findViewById(R.id.rider_main_driver_name);
+        TextView phoneTextView = view.findViewById(R.id.rider_main_driver_phone);
+        TextView emailTextView = view.findViewById(R.id.rider_main_driver_email);
         Button completeButton = view.findViewById(R.id.driver_complete_ride_button);
+
+        // Set view elements
+        pickupLocationTextView.setText(rideRequest.getStart().getName());
+        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         switch (role)
         {
             case "Rider":
                 // Set values of info box
-                name.setText(rideRequest.getDriver().getFirstName() + rideRequest.getDriver().getLastName());
-                phone.setText(rideRequest.getDriver().getPhone());
-                email.setText(rideRequest.getDriver().getEmail());
+                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
+                phoneTextView.setText(rideRequest.getDriver().getPhone());
+                emailTextView.setText(rideRequest.getDriver().getEmail());
 
-                // Show complete ride button only for Driver
+                // Complete ride button only visible by driver; rider hides it
                 completeButton.setVisibility(View.INVISIBLE);
                 break;
 
             case "Driver":
                 // Set values of info box
-                name.setText(rideRequest.getRider().getFirstName() + rideRequest.getDriver().getLastName());
-                phone.setText(rideRequest.getRider().getPhone());
-                email.setText(rideRequest.getRider().getEmail());
+                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
+                phoneTextView.setText(rideRequest.getRider().getPhone());
+                emailTextView.setText(rideRequest.getRider().getEmail());
+
+                completeButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        // TODO: Set request status to COMPLETED and move Driver to PAYMENT screen
+                    }
+                });
                 break;
         }
 
         // Bring up profile when name is clicked
-        name.setOnClickListener(new NameOnClickListener(role));
-
-        completeButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                // TODO: Set request status to COMPLETED and move Driver to PAYMENT screen
-            }
-        });
+        nameTextView.setOnClickListener(new NameOnClickListener(role));
 
         return view;
     }

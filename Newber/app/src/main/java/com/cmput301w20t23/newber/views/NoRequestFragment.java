@@ -28,27 +28,31 @@ public class NoRequestFragment extends Fragment {
         switch (role) {
             case "Rider":
                 createRequestButton.setText("Make a request");
+                createRequestButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Intent intent = new Intent(getActivity(), RiderRequestActivity.class);
+                        startActivity(intent);
+                    }
+                });
                 break;
             case "Driver":
                 createRequestButton.setText("Search for a ride");
+                createRequestButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        // Start DriverSearchForRequest activity
+//                        Intent intent = new Intent(getActivity(), RiderRequestActivity.class);
+//                        startActivity(intent);
+                    }
+                });
                 break;
         }
 
-        createRequestButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                switch (role) {
-                    case "Rider":
-                        Intent intent = new Intent(getActivity(), RiderRequestActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Driver":
-                        break;
-                }
-            }
-        });
         return view;
     }
 }
