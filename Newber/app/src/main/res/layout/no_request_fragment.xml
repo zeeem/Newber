@@ -14,7 +14,6 @@
     <Button
         android:id="@+id/create_request_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/create_request_button_txt" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

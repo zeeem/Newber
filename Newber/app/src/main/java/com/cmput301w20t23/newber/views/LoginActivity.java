@@ -45,16 +45,8 @@ public class LoginActivity extends AppCompatActivity {
                     String role = dataSnapshot.child("role").getValue(String.class);
                     System.out.println(role);
 
-                    switch (role) {
-                        case "Rider":
-                            Intent riderIntent = new Intent(LoginActivity.this, RiderMainActivity.class);
-                            startActivity(riderIntent);
-                            break;
-                        case "Driver":
-                            Intent driverIntent = new Intent(LoginActivity.this, DriverMainActivity.class);
-                            startActivity(driverIntent);
-                            break;
-                    }
+                    Intent driverIntent = new Intent(LoginActivity.this, RiderMainActivity.class);
+                    startActivity(driverIntent);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {

@@ -1,6 +1,5 @@
 package com.cmput301w20t23.newber.views;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -8,38 +7,32 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.RideRequest;
-import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RiderMainActivity extends AppCompatActivity {
-    RideRequest currRequest;
-    User currUserInfo;
-    FirebaseAuth mAuth;
-    String role = "Rider";
+    RideRequest currRequest; // To be updated when querying db
+    String role = "Rider"; // To be updated when querying db
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_rider);
 
+        // TODO: Get from DB current user and current ride request and save as local objects
+
         Fragment riderFragment = null;
         TextView statusBanner = findViewById(R.id.main_status_banner);
 
-        // TODO: Get current user information and pass to NoRequestFragment
-        // create user object and update role attribute
-
         if (currRequest == null) {
-            // if no current request, use "no current request" fragment
+            // if current user has no request attached, use "no current request" fragment
             statusBanner.setText("No Request");
             statusBanner.setBackgroundColor(Color.LTGRAY);
             riderFragment = new NoRequestFragment(role);
@@ -61,9 +54,11 @@ public class RiderMainActivity extends AppCompatActivity {
                 case IN_PROGRESS:
                     statusBanner.setText("In Progress");
                     statusBanner.setBackgroundColor(Color.YELLOW);
+                    riderFragment = new RequestInProgressFragment(currRequest, role);
                 case COMPLETED:
                     statusBanner.setText("Completed");
                     statusBanner.setBackgroundColor(Color.CYAN);
+                    riderFragment = new RequestCompletedFragment(currRequest);
             }
         }
 

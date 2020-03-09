@@ -25,6 +25,15 @@ public class NoRequestFragment extends Fragment {
 
         Button createRequestButton = view.findViewById(R.id.create_request_button);
 
+        switch (role) {
+            case "Rider":
+                createRequestButton.setText("Make a request");
+                break;
+            case "Driver":
+                createRequestButton.setText("Search for a ride");
+                break;
+        }
+
         createRequestButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
