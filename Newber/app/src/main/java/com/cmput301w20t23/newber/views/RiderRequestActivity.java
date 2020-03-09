@@ -9,8 +9,10 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.controllers.RideController;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,8 +36,13 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
     private GoogleMap googleMap;
     private View mainLayout;
     private static final int PERMISSION_REQUEST_LOCATION = 0;
-    private AutocompleteSupportFragment fromAutocompleteSupportFragment;
-    private AutocompleteSupportFragment toAutocompleteSupportFragment;
+    private AutocompleteSupportFragment startAutocompleteSupportFragment;
+    private AutocompleteSupportFragment endAutocompleteSupportFragment;
+
+    private Place fromPlace;
+    private Place toPlace;
+
+    private RideController rideController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +55,25 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         mapFragment.getMapAsync(this);
 
         setUpAutoCompleteFragments();
+        rideController = new RideController();
     }
 
     public void setUpAutoCompleteFragments() {
-        fromAutocompleteSupportFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.from_autocomplete_fragment);
+        startAutocompleteSupportFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.start_autocomplete_fragment);
+        startAutocompleteSupportFragment.setHint("Search");
 
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyAGmBxEjzU68YpgCNWsldO73dFcwnj0BT8", Locale.CANADA);
+            Places.initialize(getApplicationContext(), getString(R.string.API_KEY), Locale.CANADA);
         }
+        startAutocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
 
-        fromAutocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-
-        fromAutocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        startAutocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 System.out.println("From Place: " + place.getName() + ", latlng: " + place.getLatLng());
-                RiderRequestActivity.this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                RiderRequestActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 10.0f));
+                fromPlace = place;
             }
 
             @Override
@@ -73,20 +82,21 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
-        toAutocompleteSupportFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.to_autocomplete_fragment);
+        endAutocompleteSupportFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.end_autocomplete_fragment);
+        endAutocompleteSupportFragment.setHint("Search");
 
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyAGmBxEjzU68YpgCNWsldO73dFcwnj0BT8", Locale.CANADA);
+            Places.initialize(getApplicationContext(), getString(R.string.API_KEY), Locale.CANADA);
         }
+        endAutocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
 
-        toAutocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-
-        toAutocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        endAutocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 System.out.println("To Place: " + place.getName() + ", latlng: " + place.getLatLng());
-                RiderRequestActivity.this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                RiderRequestActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),10.0f));
+                toPlace = place;
             }
 
             @Override
@@ -136,7 +146,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    private void setupUiSettings() {
+    private void setUpUiSettings() {
         UiSettings uiSettings = this.googleMap.getUiSettings();
         uiSettings.setAllGesturesEnabled(true);
         uiSettings.setZoomControlsEnabled(true);
@@ -146,8 +156,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-
-        setupUiSettings();
+        setUpUiSettings();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -156,8 +165,23 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             requestLocationPermission();
         }
 
-        // Add a marker in Sydney and move the camera
-        LatLng edmonton = new LatLng(53.5558749,-113.772903);
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(edmonton));
+        // Add a marker in Edmonton and move the camera
+        LatLng Edmonton = new LatLng(53.5558749,-113.772903);
+        this.googleMap.addMarker(new MarkerOptions().position(Edmonton));
+//        this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Edmonton, 20.0f));
+    }
+
+    public void cancelRiderRequest(View view) {
+        finish();
+    }
+
+    public void confirmRiderRequest(View view) {
+        if ((fromPlace == null) || (toPlace == null)) {
+            Toast.makeText(this, "Please select endpoints", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        rideController.createRideRequest(fromPlace.getId(), toPlace.getId(), 10.00);
+        finish();
     }
 }

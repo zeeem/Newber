@@ -5,7 +5,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.UserController;
-import com.cmput301w20t23.newber.models.DataListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

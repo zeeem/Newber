@@ -1,50 +1,47 @@
 package com.cmput301w20t23.newber.models;
 
-import android.location.Location;
-
 import java.util.UUID;
 
 public class RideRequest {
-    private UUID requestId;
-    private Location start;
-    private Location end;
+    private String requestId;
+    private String startPlaceId;
+    private String endPlaceId;
     private RequestStatus status;
-    private Driver driver;
-    private Rider rider;
+    private String driverUid;
+    private String riderUid;
     private double cost;
 
-    public RideRequest(UUID requestId, Location start, Location end, RequestStatus status, Driver driver, Rider rider, double cost) {
-        this.requestId = requestId;
-        this.start = start;
-        this.end = end;
-        this.status = status;
-        this.driver = driver;
-        this.rider = rider;
+    public RideRequest(String startPlaceId, String endPlaceId, String riderUid, double cost) {
+        this.requestId = UUID.randomUUID().toString();
+        this.startPlaceId = startPlaceId;
+        this.endPlaceId = endPlaceId;
+        this.status = RequestStatus.PENDING;
+        this.riderUid = riderUid;
         this.cost = cost;
     }
 
-    public UUID getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(UUID requestId) {
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 
-    public Location getStart() {
-        return start;
+    public String getStartPlaceId() {
+        return startPlaceId;
     }
 
-    public void setStart(Location start) {
-        this.start = start;
+    public void setStartPlaceId(String startPlaceId) {
+        this.startPlaceId = startPlaceId;
     }
 
-    public Location getEnd() {
-        return end;
+    public String getEndPlaceId() {
+        return endPlaceId;
     }
 
-    public void setEnd(Location end) {
-        this.end = end;
+    public void setEndPlaceId(String endPlaceId) {
+        this.endPlaceId = endPlaceId;
     }
 
     public RequestStatus getStatus() {
@@ -55,20 +52,20 @@ public class RideRequest {
         this.status = status;
     }
 
-    public Driver getDriver() {
-        return driver;
+    public String getDriverUid() {
+        return driverUid;
     }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public void setDriverUid(String driver) {
+        this.driverUid = driver;
     }
 
-    public Rider getRider() {
-        return rider;
+    public String getRiderUid() {
+        return riderUid;
     }
 
-    public void setRider(Rider rider) {
-        this.rider = rider;
+    public void setRiderUid(String riderUid) {
+        this.riderUid = riderUid;
     }
 
     public double getCost() {
