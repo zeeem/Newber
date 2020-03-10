@@ -5,7 +5,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.UserController;
-import com.cmput301w20t23.newber.models.DataListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -45,16 +44,9 @@ public class LoginActivity extends AppCompatActivity {
                     String role = dataSnapshot.child("role").getValue(String.class);
                     System.out.println(role);
 
-                    switch (role) {
-                        case "Rider":
-                            Intent riderIntent = new Intent(LoginActivity.this, RiderMainActivity.class);
-                            startActivity(riderIntent);
-                            break;
-                        case "Driver":
-                            Intent driverIntent = new Intent(LoginActivity.this, DriverMainActivity.class);
-                            startActivity(driverIntent);
-                            break;
-                    }
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -89,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("MYTAG", "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         // transition to main screen after log in
-                        Intent mainIntent = new Intent(getBaseContext(), RiderMainActivity.class);
+                        Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
                         mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(mainIntent);
                         finish();

@@ -10,7 +10,7 @@ import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
-import com.cmput301w20t23.newber.views.RiderMainActivity;
+import com.cmput301w20t23.newber.views.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -111,7 +111,7 @@ public class UserController {
                                 .setValue(new Rating(0, 0));
                     }
 
-                    Intent signedUpIntent = new Intent(context, RiderMainActivity.class);
+                    Intent signedUpIntent = new Intent(context, MainActivity.class);
                     signedUpIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(signedUpIntent);
                 }

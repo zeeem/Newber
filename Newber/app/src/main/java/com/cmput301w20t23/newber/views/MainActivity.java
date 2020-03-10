@@ -13,44 +13,50 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
-import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 
-public class DriverMainActivity extends AppCompatActivity {
-
-    RideRequest currRequest = null;
+public class MainActivity extends AppCompatActivity {
+    RideRequest currRequest; // To be updated when querying db
+    String role = "Rider"; // To be updated when querying db
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_driver);
+        setContentView(R.layout.activity_main);
+
+        // TODO: Get from DB current user and current ride request and save as local objects
 
         Fragment riderFragment = null;
         TextView statusBanner = findViewById(R.id.main_status_banner);
 
         if (currRequest == null) {
-            // if no current request, use "no current request" fragment
+            // if current user has no request attached, use "no current request" fragment
             statusBanner.setText("No Request");
             statusBanner.setBackgroundColor(Color.LTGRAY);
-            riderFragment = new RiderRequestNoneFragment();
+            riderFragment = new NoRequestFragment(role);
         }
         else {
             switch (currRequest.getStatus()) {
                 case PENDING:
                     statusBanner.setText("Requested");
                     statusBanner.setBackgroundColor(Color.RED);
+                    riderFragment = new RequestPendingFragment(currRequest);
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
+                    riderFragment = new RequestOfferedFragment(currRequest, role);
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
                     statusBanner.setBackgroundColor(Color.GREEN);
+                    riderFragment = new RequestAcceptedFragment(currRequest, role);
                 case IN_PROGRESS:
                     statusBanner.setText("In Progress");
                     statusBanner.setBackgroundColor(Color.YELLOW);
+                    riderFragment = new RequestInProgressFragment(currRequest, role);
                 case COMPLETED:
                     statusBanner.setText("Completed");
                     statusBanner.setBackgroundColor(Color.CYAN);
+                    riderFragment = new RequestCompletedFragment(currRequest);
             }
         }
 
