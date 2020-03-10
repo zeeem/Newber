@@ -2,18 +2,20 @@ package com.cmput301w20t23.newber.models;
 
 import android.location.Location;
 
+import com.google.android.libraries.places.api.model.Place;
+
 import java.util.UUID;
 
 public class RideRequest {
     private UUID requestId;
-    private Location start;
-    private Location end;
+    private Place start;
+    private Place end;
     private RequestStatus status;
     private Driver driver;
     private Rider rider;
     private double cost;
 
-    public RideRequest(UUID requestId, Location start, Location end, RequestStatus status, Driver driver, Rider rider, double cost) {
+    public RideRequest(UUID requestId, Place start, Place end, RequestStatus status, Driver driver, Rider rider, double cost) {
         this.requestId = requestId;
         this.start = start;
         this.end = end;
@@ -31,19 +33,19 @@ public class RideRequest {
         this.requestId = requestId;
     }
 
-    public Location getStart() {
+    public Place getStart() {
         return start;
     }
 
-    public void setStart(Location start) {
+    public void setStart(Place start) {
         this.start = start;
     }
 
-    public Location getEnd() {
+    public Place getEnd() {
         return end;
     }
 
-    public void setEnd(Location end) {
+    public void setEnd(Place end) {
         this.end = end;
     }
 
