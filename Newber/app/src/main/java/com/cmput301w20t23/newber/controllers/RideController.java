@@ -13,7 +13,7 @@ public class RideController {
         this.database = FirebaseDatabase.getInstance();
         this.mAuth = FirebaseAuth.getInstance();
     }
-
+    
     public void createRideRequest(final Place startPlace, final Place endPlace, double cost) {
         String riderUid = this.mAuth.getCurrentUser().getUid();
         RideRequest rideRequest = new RideRequest(startPlace, endPlace, riderUid, cost);

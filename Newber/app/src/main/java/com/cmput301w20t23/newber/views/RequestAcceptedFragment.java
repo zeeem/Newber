@@ -53,9 +53,9 @@ public class RequestAcceptedFragment extends Fragment {
                 button.setText("Cancel");
 
                 // Set values of info box
-                name.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
-                phone.setText(rideRequest.getDriver().getPhone());
-                email.setText(rideRequest.getDriver().getEmail());
+//                name.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
+//                phone.setText(rideRequest.getDriver().getPhone());
+//                email.setText(rideRequest.getDriver().getEmail());
 
                 button.setOnClickListener(new View.OnClickListener()
                 {
@@ -72,9 +72,9 @@ public class RequestAcceptedFragment extends Fragment {
                 button.setText("Rider picked up");
 
                 // Set values of info box
-                name.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
-                phone.setText(rideRequest.getRider().getPhone());
-                email.setText(rideRequest.getRider().getEmail());
+//                name.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
+//                phone.setText(rideRequest.getRider().getPhone());
+//                email.setText(rideRequest.getRider().getEmail());
 
                 button.setOnClickListener(new View.OnClickListener()
                 {

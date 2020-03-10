@@ -48,9 +48,9 @@ public class RequestInProgressFragment extends Fragment {
         {
             case "Rider":
                 // Set values of info box
-                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
-                phoneTextView.setText(rideRequest.getDriver().getPhone());
-                emailTextView.setText(rideRequest.getDriver().getEmail());
+//                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
+//                phoneTextView.setText(rideRequest.getDriver().getPhone());
+//                emailTextView.setText(rideRequest.getDriver().getEmail());
 
                 // Complete ride button only visible by driver; rider hides it
                 completeButton.setVisibility(View.INVISIBLE);
@@ -58,9 +58,9 @@ public class RequestInProgressFragment extends Fragment {
 
             case "Driver":
                 // Set values of info box
-                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
-                phoneTextView.setText(rideRequest.getRider().getPhone());
-                emailTextView.setText(rideRequest.getRider().getEmail());
+//                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
+//                phoneTextView.setText(rideRequest.getRider().getPhone());
+//                emailTextView.setText(rideRequest.getRider().getEmail());
 
                 completeButton.setOnClickListener(new View.OnClickListener()
                 {

@@ -41,9 +41,9 @@ public class RequestCompletedFragment extends Fragment {
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Set driver box information
-        nameTextView.setText(rideRequest.getDriver().getFirstName() + rideRequest.getDriver().getLastName());
-        phoneTextView.setText(rideRequest.getDriver().getPhone());
-        emailTextView.setText(rideRequest.getDriver().getEmail());
+//        nameTextView.setText(rideRequest.getDriver().getFirstName() + rideRequest.getDriver().getLastName());
+//        phoneTextView.setText(rideRequest.getDriver().getPhone());
+//        emailTextView.setText(rideRequest.getDriver().getEmail());
 
         completeRequestButton.setOnClickListener(new View.OnClickListener()
         {
