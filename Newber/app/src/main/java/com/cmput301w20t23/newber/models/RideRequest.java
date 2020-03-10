@@ -1,20 +1,22 @@
 package com.cmput301w20t23.newber.models;
 
+import com.google.android.libraries.places.api.model.Place;
+
 import java.util.UUID;
 
 public class RideRequest {
     private String requestId;
-    private String startPlaceId;
-    private String endPlaceId;
+    private Place startPlace;
+    private Place endPlace;
     private RequestStatus status;
     private String driverUid;
     private String riderUid;
     private double cost;
 
-    public RideRequest(String startPlaceId, String endPlaceId, String riderUid, double cost) {
+    public RideRequest(Place startPlace, Place endPlace, String riderUid, double cost) {
         this.requestId = UUID.randomUUID().toString();
-        this.startPlaceId = startPlaceId;
-        this.endPlaceId = endPlaceId;
+        this.startPlace = startPlace;
+        this.endPlace = endPlace;
         this.status = RequestStatus.PENDING;
         this.riderUid = riderUid;
         this.cost = cost;
@@ -28,20 +30,20 @@ public class RideRequest {
         this.requestId = requestId;
     }
 
-    public String getStartPlaceId() {
-        return startPlaceId;
+    public Place getStartPlace() {
+        return startPlace;
     }
 
-    public void setStartPlaceId(String startPlaceId) {
-        this.startPlaceId = startPlaceId;
+    public void setStartPlace(Place startPlace) {
+        this.startPlace = startPlace;
     }
 
-    public String getEndPlaceId() {
-        return endPlaceId;
+    public Place getEndPlace() {
+        return endPlace;
     }
 
-    public void setEndPlaceId(String endPlaceId) {
-        this.endPlaceId = endPlaceId;
+    public void setEndPlace(Place endPlace) {
+        this.endPlace = endPlace;
     }
 
     public RequestStatus getStatus() {

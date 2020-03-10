@@ -39,8 +39,8 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
     private AutocompleteSupportFragment startAutocompleteSupportFragment;
     private AutocompleteSupportFragment endAutocompleteSupportFragment;
 
-    private Place fromPlace;
-    private Place toPlace;
+    private Place startPlace;
+    private Place endPlace;
 
     private RideController rideController;
 
@@ -73,7 +73,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             public void onPlaceSelected(@NonNull Place place) {
                 System.out.println("From Place: " + place.getName() + ", latlng: " + place.getLatLng());
                 RiderRequestActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 10.0f));
-                fromPlace = place;
+                startPlace = place;
             }
 
             @Override
@@ -96,7 +96,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             public void onPlaceSelected(@NonNull Place place) {
                 System.out.println("To Place: " + place.getName() + ", latlng: " + place.getLatLng());
                 RiderRequestActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),10.0f));
-                toPlace = place;
+                endPlace = place;
             }
 
             @Override
@@ -176,12 +176,12 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
     }
 
     public void confirmRiderRequest(View view) {
-        if ((fromPlace == null) || (toPlace == null)) {
+        if ((startPlace == null) || (endPlace == null)) {
             Toast.makeText(this, "Please select endpoints", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        rideController.createRideRequest(fromPlace.getId(), toPlace.getId(), 10.00);
+        rideController.createRideRequest(startPlace, endPlace, 10.00);
         finish();
     }
 }
