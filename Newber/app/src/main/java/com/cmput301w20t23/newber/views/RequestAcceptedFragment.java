@@ -41,8 +41,8 @@ public class RequestAcceptedFragment extends Fragment {
         Button button = view.findViewById(R.id.request_accepted_button);
 
         // Set view elements
-        pickupLocationTextView.setText(rideRequest.getStart().getName());
-        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+//        pickupLocationTextView.setText(rideRequest.getStart().getName());
+//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Change UI based on role

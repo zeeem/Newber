@@ -36,8 +36,8 @@ public class RequestCompletedFragment extends Fragment {
         Button completeRequestButton = view.findViewById(R.id.rider_complete_ride_button);
 
         // Set view elements
-        pickupLocationTextView.setText(rideRequest.getStart().getName());
-        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+//        pickupLocationTextView.setText(rideRequest.getStart().getName());
+//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Set driver box information

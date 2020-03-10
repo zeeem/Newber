@@ -40,8 +40,8 @@ public class RequestInProgressFragment extends Fragment {
         Button completeButton = view.findViewById(R.id.driver_complete_ride_button);
 
         // Set view elements
-        pickupLocationTextView.setText(rideRequest.getStart().getName());
-        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+//        pickupLocationTextView.setText(rideRequest.getStart().getName());
+//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         switch (role)

@@ -33,8 +33,8 @@ public class RequestPendingFragment extends Fragment {
         Button cancelRequestButton = view.findViewById(R.id.rider_pending_request_button);
 
         // Set view elements
-        pickupLocationTextView.setText(rideRequest.getStart().getName());
-        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+//        pickupLocationTextView.setText(rideRequest.getStart().getName());
+//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         cancelRequestButton.setOnClickListener(new View.OnClickListener()

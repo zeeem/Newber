@@ -41,8 +41,8 @@ public class RequestOfferedFragment extends Fragment {
         Button declineOfferButton = view.findViewById(R.id.rider_decline_offer_button);
 
         // Set view elements
-        pickupLocationTextView.setText(rideRequest.getStart().getName());
-        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+//        pickupLocationTextView.setText(rideRequest.getStart().getName());
+//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         switch (role) {
