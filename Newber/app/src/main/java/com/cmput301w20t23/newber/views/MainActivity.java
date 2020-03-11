@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: Get from DB current user and current ride request and save as local objects
         // Get current userID
         String userId = mAuth.getCurrentUser().getUid();
 
@@ -62,22 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
                 // Use User.currRequestId to get RideRequest object from requests table
                 if (currentRequestId != null) {
+                    System.out.println("currReqId not null");
                     database.getReference("rideRequests")
                             .child(currentRequestId).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 currRequest = dataSnapshot.getValue(RideRequest.class);
-//                                double cost = dataSnapshot.child("cost").getValue(Double.class);
-//                                String driverUid = dataSnapshot.child("driverUid").getValue(String.class);
-//                                String riderUid = dataSnapshot.child("riderUid").getValue(String.class);
-//                                String requestId = dataSnapshot.child("requestId").getValue(String.class);
-//                                RequestStatus requestStatus = dataSnapshot.child("status").getValue(RequestStatus.class);
-//                                System.out.println(requestStatus);
-//                                Location startLocation = dataSnapshot.child("startLocation").getValue(Location.class);
-//                                System.out.println(startLocation.getName());
-//                                Location endLocation = dataSnapshot.child("endLocation").getValue(Location.class);
-//                                currRequest = new RideRequest(requestId, startLocation, endLocation, requestStatus, riderUid, driverUid, cost);
                                 displayFragment();
                             }
                         }
@@ -87,8 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });
+                } else {
+                    currRequest = null;
+                    displayFragment();
                 }
-                displayFragment();
             }
 
             @Override

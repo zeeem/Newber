@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Location;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * The Android Fragment that is shown when the user has a pending current ride request.
@@ -54,7 +55,14 @@ public class RequestPendingFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // TODO: remove request from firebase user and requests table
+                // Remove request from firebase requests table
+                FirebaseDatabase.getInstance().getReference("rideRequests")
+                        .child(rideRequest.getRequestId()).removeValue();
+
+                // Remove current request ID from firebase user entry
+                FirebaseDatabase.getInstance().getReference("users")
+                        .child(rideRequest.getRiderUid())
+                        .child("currentRequestId").removeValue();
             }
         });
         return view;
