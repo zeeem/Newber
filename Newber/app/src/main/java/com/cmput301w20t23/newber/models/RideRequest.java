@@ -36,6 +36,16 @@ public class RideRequest {
         this.cost = cost;
     }
 
+    public RideRequest(Place startPlace, Place endPlace, String riderUid, String driverUid, double cost, RequestStatus status) {
+        this.requestId = UUID.randomUUID().toString();
+        this.startPlace = startPlace;
+        this.endPlace = endPlace;
+        this.status = status;
+        this.riderUid = riderUid;
+        this.driverUid = driverUid;
+        this.cost = cost;
+    }
+
     /**
      * Gets request id.
      *

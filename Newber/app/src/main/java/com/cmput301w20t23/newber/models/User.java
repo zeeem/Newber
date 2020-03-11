@@ -25,14 +25,14 @@ public class User {
      * @param uId       the user id
      */
 
-    public User(String firstName, String lastName, String username, String phone, String email, String uId, String currRequestId) {
+    public User(String firstName, String lastName, String username, String phone, String email, String uId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.phone = phone;
         this.email = email;
         this.uId = uId;
-        this.currRequestId = currRequestId;
+        this.currRequestId = "";
     }
 
     /**
@@ -125,8 +125,8 @@ public class User {
         this.email = email;
     }
 
-    public String getCurrRequestId() { return this.currRequestId; }
+    public String getCurrentRequestId() { return this.currRequestId; }
 
-    public void setCurrRequestId(String currRequestId) { this.currRequestId = currRequestId; }
+    public void setCurrentRequestId(String currRequestId) { this.currRequestId = currRequestId; }
 
 }

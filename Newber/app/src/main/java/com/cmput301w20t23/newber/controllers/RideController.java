@@ -20,5 +20,6 @@ public class RideController {
         database.getReference("rideRequests")
                 .child(rideRequest.getRequestId())
                 .setValue(rideRequest);
+        database.getReference("users").child(riderUid).child("currentRequestId").setValue(rideRequest.getRequestId());
     }
 }

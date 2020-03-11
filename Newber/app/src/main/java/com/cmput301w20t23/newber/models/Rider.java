@@ -18,12 +18,12 @@ public class Rider extends User {
      * @param phone         the phone
      * @param email         the email
      * @param uId           the user id
-     * @param currRequestId the current request of driver
      */
 
     public Rider(String firstName, String lastName, String username, String phone, String email,
-                 String uId, String currRequestId) {
-        super(firstName, lastName, username, phone, email, uId, currRequestId);
+                 String uId, String currentRequestId) {
+        super(firstName, lastName, username, phone, email, uId);
+        this.setCurrentRequestId(currentRequestId);
         this.currentRequest = null;
     }
 

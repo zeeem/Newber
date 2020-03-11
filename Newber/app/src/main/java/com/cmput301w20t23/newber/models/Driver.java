@@ -9,7 +9,6 @@ public class Driver extends User {
     private Rating rating;
     private RideRequest currentRequest;
 
-<<<<<<< HEAD
     /**
      * Instantiates a new Driver.
      *
@@ -23,9 +22,10 @@ public class Driver extends User {
 
     public Driver(String firstName, String lastName, String username, String phone, String email,
                   String uId, String currRequestId, Rating rating) {
-        super(firstName, lastName, username, phone, email, uId, currRequestId);
+        super(firstName, lastName, username, phone, email, uId);
         this.rating = rating;
         this.currentRequest = null;
+        this.setCurrentRequestId(currRequestId);
     }
 
     public void setRating(Rating rating) { this.rating = rating; }

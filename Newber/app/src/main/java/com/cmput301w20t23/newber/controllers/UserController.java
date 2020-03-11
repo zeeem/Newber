@@ -147,6 +147,10 @@ public class UserController {
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .child("role").setValue(role);
 
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("currentRequestId").setValue("");
+
                     // if the user to be created is a driver, create upvotes and downvotes fields in database
                     if (role.equals("Driver")) {
                         FirebaseDatabase.getInstance().getReference("drivers")
