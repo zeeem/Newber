@@ -28,6 +28,11 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Arrays;
 import java.util.Locale;
 
+/**
+ * The Android Activity that handles the creation of a ride request by a rider.
+ *
+ * @author Ibrahim Aly, Ayushi Patel
+ */
 public class RiderRequestActivity extends AppCompatActivity implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -50,6 +55,9 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         setUpAutoCompleteFragments();
     }
 
+    /**
+     * Sets up auto complete fragments.
+     */
     public void setUpAutoCompleteFragments() {
         fromAutocompleteSupportFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.from_autocomplete_fragment);

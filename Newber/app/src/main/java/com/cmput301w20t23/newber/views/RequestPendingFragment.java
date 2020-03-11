@@ -12,10 +12,20 @@ import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.RideRequest;
 
+/**
+ * The Android Fragment that is shown when the user has a pending current ride request.
+ *
+ * @author Amy Hou
+ */
 public class RequestPendingFragment extends Fragment {
 
     private RideRequest rideRequest;
 
+    /**
+     * Instantiates a new RequestPendingFragment.
+     *
+     * @param request the current request
+     */
     public RequestPendingFragment(RideRequest request) {
         rideRequest = request;
     }
