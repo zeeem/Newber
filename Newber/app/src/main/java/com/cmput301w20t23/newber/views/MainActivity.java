@@ -14,7 +14,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
+<<<<<<< HEAD
 import com.cmput301w20t23.newber.models.Location;
+=======
+>>>>>>> f485753f46adffe1ef4499410694a3b260f83a73
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.google.android.libraries.places.api.model.Place;
@@ -45,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
+=======
+        // TODO: Get from DB current user and current ride request and save as local objects
+>>>>>>> f485753f46adffe1ef4499410694a3b260f83a73
         // Get current userID
         String userId = mAuth.getCurrentUser().getUid();
 
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 // Use User.currRequestId to get RideRequest object from requests table
                 if (currentRequestId != null) {
                     System.out.println("currReqId not null");
+
                     database.getReference("rideRequests")
                             .child(currentRequestId).addValueEventListener(new ValueEventListener() {
                         @Override
