@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -41,11 +42,12 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
     private GoogleMap googleMap;
     private View mainLayout;
     private static final int PERMISSION_REQUEST_LOCATION = 0;
-    private AutocompleteSupportFragment startAutocompleteSupportFragment;
-    private AutocompleteSupportFragment endAutocompleteSupportFragment;
 
     private Place startPlace;
     private Place endPlace;
+
+    private Marker startMarker;
+    private Marker endMarker;
 
     private RideController rideController;
 
@@ -67,7 +69,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
      * Sets up auto complete fragments.
      */
     public void setUpAutoCompleteFragments() {
-        startAutocompleteSupportFragment = (AutocompleteSupportFragment)
+        AutocompleteSupportFragment startAutocompleteSupportFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.start_autocomplete_fragment);
         startAutocompleteSupportFragment.setHint("Search");
 
@@ -80,7 +82,11 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 System.out.println("From Place: " + place.getName() + ", latlng: " + place.getLatLng());
-                RiderRequestActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 10.0f));
+                if (startMarker != null) {
+                    startMarker.remove();
+                }
+                startMarker = googleMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 12.0f));
                 startPlace = place;
             }
 
@@ -90,7 +96,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
-        endAutocompleteSupportFragment = (AutocompleteSupportFragment)
+        AutocompleteSupportFragment endAutocompleteSupportFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.end_autocomplete_fragment);
         endAutocompleteSupportFragment.setHint("Search");
 
@@ -103,7 +109,11 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 System.out.println("To Place: " + place.getName() + ", latlng: " + place.getLatLng());
-                RiderRequestActivity.this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),10.0f));
+                if (endMarker != null) {
+                    endMarker.remove();
+                }
+                endMarker = googleMap.addMarker(new MarkerOptions().position(place.getLatLng()));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),12.0f));
                 endPlace = place;
             }
 
@@ -174,9 +184,8 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         }
 
         // Add a marker in Edmonton and move the camera
-        LatLng Edmonton = new LatLng(53.5558749,-113.772903);
-        this.googleMap.addMarker(new MarkerOptions().position(Edmonton));
-//        this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Edmonton, 20.0f));
+        LatLng Edmonton = new LatLng(53.5461215,-113.4939365);
+        this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Edmonton, 10.0f));
     }
 
     public void cancelRiderRequest(View view) {
