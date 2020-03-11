@@ -38,7 +38,6 @@ public class RideRequest {
         this.cost = cost;
     }
 
-<<<<<<< HEAD
     public RideRequest(String requestId, Location startLocation, Location endLocation, RequestStatus status, String riderUid, String driverUid, double cost) {
         this.requestId = requestId;
         this.startLocation = startLocation;
