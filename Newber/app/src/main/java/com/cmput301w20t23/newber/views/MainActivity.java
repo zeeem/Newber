@@ -1,5 +1,6 @@
 package com.cmput301w20t23.newber.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -7,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +16,12 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * The Android Activity that acts as the main user screen of the app.
@@ -21,14 +29,20 @@ import com.cmput301w20t23.newber.models.RideRequest;
  * @author Amy Hou
  */
 public class MainActivity extends AppCompatActivity {
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
     /**
      * The user's current ride request.
      */
     RideRequest currRequest; // To be updated when querying db
+
     /**
      * The user's role.
      */
-    String role = "Rider"; // To be updated when querying db
+    String role;
+
+    User user; // To be updated when querying db
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +50,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // TODO: Get from DB current user and current ride request and save as local objects
+        // Get current userID
+        String userId = this.mAuth.getCurrentUser().getUid();
+
+        // Get User object using Firebase users table
+        database.getReference("users")
+                .child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                role = dataSnapshot.child("role").getValue(String.class);
+                switch (role) {
+                    case "Rider":
+                        break;
+                    case "Driver":
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        
+        // Use User.currRequestId to get RideRequest object from requests table
 
         Fragment riderFragment = null;
         TextView statusBanner = findViewById(R.id.main_status_banner);
