@@ -25,6 +25,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * The Android Activity that contains the user's profile.
+ *
+ * @author Jessica D'Cunha, Gaurav Sekhar
+ */
 public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private UserController userController;
@@ -121,6 +126,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Retrieves rating information from the database.
+     */
     public void loadRatings() {
         FirebaseDatabase.getInstance().getReference("drivers")
                 .child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
@@ -136,6 +144,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handles editing of the contact info in the profile.
+     */
     public void edit() {
         AlertDialog.Builder editDialogBuilder = new AlertDialog.Builder(this);
         editDialogBuilder.setTitle("Edit Contact Information");
@@ -183,6 +194,9 @@ public class ProfileActivity extends AppCompatActivity {
         editDialog.show();
     }
 
+    /**
+     * Initiates logging out of the app.
+     */
     public void logout() {
         userController.logout();
         Intent i = new Intent(this, LoginActivity.class);

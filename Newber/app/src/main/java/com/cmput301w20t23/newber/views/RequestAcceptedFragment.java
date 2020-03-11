@@ -9,16 +9,27 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
-import com.cmput301w20t23.newber.models.NameOnClickListener;
+import com.cmput301w20t23.newber.controllers.NameOnClickListener;
 import com.cmput301w20t23.newber.models.RideRequest;
 
 import androidx.fragment.app.Fragment;
 
+/**
+ * The Android Fragment that is shown when the user has an accepted current ride request.
+ *
+ * @author Amy Hou
+ */
 public class RequestAcceptedFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
 
+    /**
+     * Instantiates a new RequestAcceptedFragment.
+     *
+     * @param request the user's current request
+     * @param role    the user's role
+     */
     public RequestAcceptedFragment(RideRequest request, String role) {
         this.rideRequest = request;
         this.role = role;

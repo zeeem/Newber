@@ -29,17 +29,34 @@ import androidx.annotation.NonNull;
 
 import static android.content.ContentValues.TAG;
 
+/**
+ * Controller class for handling all user-related data processing.
+ *
+ * @author Jessica D'Cunha, Gaurav Sekhar
+ */
 public class UserController {
     private Context context;
     private FirebaseAuth mAuth;
     private Rider rider;
     private Driver driver;
 
+    /**
+     * Instantiates a new UserController.
+     *
+     * @param context the Android context
+     */
     public UserController(Context context) {
         this.context = context;
         this.mAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * Checks that the login fields are nonempty.
+     *
+     * @param email    the user's email
+     * @param password the user's password
+     * @return a boolean indicating whether or not the Login fields are valid
+     */
     public boolean isLoginValid(String email, String password) {
         if ((email.trim()).length() == 0 | password.trim().length() == 0) {
             Toast.makeText(context, "Please enter a username and password", Toast.LENGTH_SHORT).show();
@@ -48,6 +65,19 @@ public class UserController {
         return true;
     }
 
+    /**
+     * Checks that the Sign Up fields are valid, i.e. nonempty and having proper format.
+     *
+     * @param role            the user's role
+     * @param firstName       the user's first name
+     * @param lastName        the user's last name
+     * @param username        the user's username
+     * @param phone           the user's phone
+     * @param email           the user's email
+     * @param password        the user's password
+     * @param confirmPassword the user's password entered again to confirm
+     * @return a boolean indicating whether or not the Sign Up fields are valid
+     */
     // check if all fields contain values in sign up form
     public boolean isSignUpValid(String role, String firstName, String lastName, String username, String phone, String email, String password, String confirmPassword) {
         if (firstName.trim().length() == 0 | lastName.trim().length() == 0 |
@@ -80,10 +110,23 @@ public class UserController {
         return true;
     }
 
+    /**
+     * Logs a user out of the app through Firebase authentication.
+     */
     public void logout() {
         mAuth.signOut();
     }
 
+    /**
+     * Creates a new user in the database.
+     *
+     * @param role      the user's role
+     * @param firstName the user's first name
+     * @param lastName  the user's last name
+     * @param username  the user's username
+     * @param phone     the user's phone
+     * @param email     the user's email
+     */
     public void createUser(final String role, final String firstName, final String lastName, final String username, final String phone, final String email) {
         FirebaseDatabase.getInstance().getReference("users").orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -123,6 +166,13 @@ public class UserController {
         });
     }
 
+    /**
+     * Checks if the contact info fields are valid, i.e. nonempty and having proper format.
+     *
+     * @param email the user's email
+     * @param phone the user's phone
+     * @return a boolean indicating whether or not the contact info fields are valid.
+     */
     public boolean isContactInfoValid(String email, String phone) {
         if (phone.trim().length() == 0 | email.trim().length() == 0) {
             Toast.makeText(context, "Please enter all fields", Toast.LENGTH_SHORT).show();
@@ -142,6 +192,14 @@ public class UserController {
         return true;
     }
 
+    /**
+     * Updates the user's contact info in the database.
+     *
+     * @param context  the Android context
+     * @param email    the user's new email
+     * @param phone    the user's new phone
+     * @param password the user's password to re-authenticate in order to change the email
+     */
     public void saveContactInfo(final Context context, final String email, String phone, String password) {
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users")
                 .child(mAuth.getCurrentUser().getUid());
