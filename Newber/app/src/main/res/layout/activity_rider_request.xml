@@ -20,10 +20,10 @@
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:background="@color/quantum_grey"
+            android:gravity="center_vertical"
             android:padding="5dp"
             android:text="Start:"
             android:textColor="@color/colorBlack"
-            android:gravity="center_vertical"
             android:textSize="18sp" />
 
         <fragment android:id="@+id/start_autocomplete_fragment"
