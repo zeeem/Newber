@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 /**
  * The Android Activity that handles user login.
+ *
+ * @author Jessica D'Cunha, Gaurav Sekhar
  */
 public class LoginActivity extends AppCompatActivity {
 
