@@ -11,8 +11,8 @@ import java.util.UUID;
  */
 public class RideRequest {
     private String requestId;
-    private Place startPlace;
-    private Place endPlace;
+    private Location startLocation;
+    private Location endLocation;
     private RequestStatus status;
     private String driverUid;
     private String riderUid;
@@ -28,8 +28,8 @@ public class RideRequest {
      */
     public RideRequest(Place startPlace, Place endPlace, String riderUid, double cost) {
         this.requestId = UUID.randomUUID().toString();
-        this.startPlace = startPlace;
-        this.endPlace = endPlace;
+        this.startLocation = new Location(startPlace);
+        this.endLocation = new Location(endPlace);
         this.status = RequestStatus.PENDING;
         this.riderUid = riderUid;
         this.driverUid = "";
@@ -59,17 +59,17 @@ public class RideRequest {
      *
      * @return the starting location
      */
-    public Place getStartPlace() {
-        return startPlace;
+    public Location getStartLocation() {
+        return startLocation;
     }
 
     /**
      * Sets start.
      *
-     * @param startPlace the starting location
+     * @param startLocation the starting location
      */
-    public void setStartPlace(Place startPlace) {
-        this.startPlace = startPlace;
+    public void setStartLocation(Location startLocation) {
+        this.startLocation = startLocation;
     }
 
     /**
@@ -77,17 +77,17 @@ public class RideRequest {
      *
      * @return the ending location
      */
-    public Place getEndPlace() {
-        return endPlace;
+    public Location getEndLocation() {
+        return endLocation;
     }
 
     /**
      * Sets end.
      *
-     * @param endPlace the ending location
+     * @param endLocation the ending location
      */
-    public void setEndPlace(Place endPlace) {
-        this.endPlace = endPlace;
+    public void setEndLocation(Location endLocation) {
+        this.endLocation = endLocation;
     }
 
     /**
