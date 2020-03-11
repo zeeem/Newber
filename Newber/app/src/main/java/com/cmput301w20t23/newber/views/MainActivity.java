@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.models.Location;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.google.android.libraries.places.api.model.Place;
@@ -66,15 +67,17 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
-                                double cost = dataSnapshot.child("cost").getValue(Double.class);
-                                String driverUid = dataSnapshot.child("driverUid").getValue(String.class);
-                                String riderUid = dataSnapshot.child("riderUid").getValue(String.class);
-                                String requestId = dataSnapshot.child("requestId").getValue(String.class);
-                                RequestStatus requestStatus = dataSnapshot.child("status").getValue(RequestStatus.class);
-                                System.out.println(requestStatus);
-//                                Place startPlace = dataSnapshot.child("startPlace").getValue(Place.class);
-//                                Place endPlace = dataSnapshot.child("endPlace").getValue(Place.class);
-                                currRequest = new RideRequest(null, null, riderUid, driverUid, cost, requestStatus);
+                                currRequest = dataSnapshot.getValue(RideRequest.class);
+//                                double cost = dataSnapshot.child("cost").getValue(Double.class);
+//                                String driverUid = dataSnapshot.child("driverUid").getValue(String.class);
+//                                String riderUid = dataSnapshot.child("riderUid").getValue(String.class);
+//                                String requestId = dataSnapshot.child("requestId").getValue(String.class);
+//                                RequestStatus requestStatus = dataSnapshot.child("status").getValue(RequestStatus.class);
+//                                System.out.println(requestStatus);
+//                                Location startLocation = dataSnapshot.child("startLocation").getValue(Location.class);
+//                                System.out.println(startLocation.getName());
+//                                Location endLocation = dataSnapshot.child("endLocation").getValue(Location.class);
+//                                currRequest = new RideRequest(requestId, startLocation, endLocation, requestStatus, riderUid, driverUid, cost);
                                 displayFragment();
                             }
                         }
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
+                displayFragment();
             }
 
             @Override
