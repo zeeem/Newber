@@ -20,6 +20,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * The Android Activity that handles user sign-up.
+ *
+ * @author Jessica D'Cunha, Gaurav Sekhar
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -51,7 +56,12 @@ public class SignUpActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    // sign up user, called if "Sign Up" button is clicked
+    /**
+     * Initiate signing up of the user when the appropriate button is clicked.
+     *
+     * @param view the button that was clicked
+     */
+// sign up user, called if "Sign Up" button is clicked
     public void signUp(View view) {
 
         // get selected radio button from group
@@ -93,7 +103,12 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    // transition to LoginActivity, called if "Already registered? LOGIN" is clicked
+    /**
+     * Switch to LoginActivity when the appropriate link is clicked.
+     *
+     * @param view the TextView link that was clicked
+     */
+// transition to LoginActivity, called if "Already registered? LOGIN" is clicked
     public void login(View view) {
         Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

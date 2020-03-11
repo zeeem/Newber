@@ -22,6 +22,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * The Android Activity that handles user login.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -66,6 +69,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initiates logging in when the appropriate button is clicked.
+     *
+     * @param view the button that was clicked
+     */
     public void login(View view) {
 
         email = ((EditText)(findViewById(R.id.email_login))).getText().toString();
@@ -100,6 +108,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Switches to SignUpActivity when the appropriate link is clicked.
+     *
+     * @param view the TextView link that was clicked
+     */
     public void signUp(View view) {
         Intent signUpIntent = new Intent(getBaseContext(), SignUpActivity.class);
         signUpIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

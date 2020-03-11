@@ -15,8 +15,19 @@ import android.widget.TextView;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.RideRequest;
 
+/**
+ * The Android Activity that acts as the main user screen of the app.
+ *
+ * @author Amy Hou
+ */
 public class MainActivity extends AppCompatActivity {
+    /**
+     * The user's current ride request.
+     */
     RideRequest currRequest; // To be updated when querying db
+    /**
+     * The user's role.
+     */
     String role = "Rider"; // To be updated when querying db
 
     @Override

@@ -10,9 +10,19 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
 
+/**
+ * The Android Fragment that is shown when the user doesn't have a current ride request.
+ *
+ * @author Amy Hou
+ */
 public class NoRequestFragment extends Fragment {
     private String role;
 
+    /**
+     * Instantiates a new NoRequestFragment.
+     *
+     * @param role the user's role
+     */
     public NoRequestFragment(String role) {
         this.role = role;
     }
