@@ -1,6 +1,6 @@
 package com.cmput301w20t23.newber.models;
 
-import android.location.Location;
+import com.google.android.libraries.places.api.model.Place;
 
 import java.util.UUID;
 
@@ -10,32 +10,29 @@ import java.util.UUID;
  * @author Jessica D'Cunha, Gaurav Sekhar
  */
 public class RideRequest {
-    private UUID requestId;
-    private Location start;
-    private Location end;
+    private String requestId;
+    private Place startPlace;
+    private Place endPlace;
     private RequestStatus status;
-    private Driver driver;
-    private Rider rider;
+    private String driverUid;
+    private String riderUid;
     private double cost;
 
     /**
      * Instantiates a new Ride request.
      *
-     * @param requestId the request id
-     * @param start     the starting location
-     * @param end       the end location
-     * @param status    the status of the request
-     * @param driver    the driver involved
-     * @param rider     the rider involved
-     * @param cost      the cost of the ride
+     * @param startPlace    the starting location
+     * @param endPlace      the end location
+     * @param riderUid      the rider involved
+     * @param cost          the cost of the ride
      */
-    public RideRequest(UUID requestId, Location start, Location end, RequestStatus status, Driver driver, Rider rider, double cost) {
-        this.requestId = requestId;
-        this.start = start;
-        this.end = end;
-        this.status = status;
-        this.driver = driver;
-        this.rider = rider;
+    public RideRequest(Place startPlace, Place endPlace, String riderUid, double cost) {
+        this.requestId = UUID.randomUUID().toString();
+        this.startPlace = startPlace;
+        this.endPlace = endPlace;
+        this.status = RequestStatus.PENDING;
+        this.riderUid = riderUid;
+        this.driverUid = "";
         this.cost = cost;
     }
 
@@ -44,7 +41,7 @@ public class RideRequest {
      *
      * @return the request id
      */
-    public UUID getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
@@ -53,7 +50,7 @@ public class RideRequest {
      *
      * @param requestId the request id
      */
-    public void setRequestId(UUID requestId) {
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 
@@ -62,17 +59,17 @@ public class RideRequest {
      *
      * @return the starting location
      */
-    public Location getStart() {
-        return start;
+    public Place getStartPlace() {
+        return startPlace;
     }
 
     /**
      * Sets start.
      *
-     * @param start the starting location
+     * @param startPlace the starting location
      */
-    public void setStart(Location start) {
-        this.start = start;
+    public void setStartPlace(Place startPlace) {
+        this.startPlace = startPlace;
     }
 
     /**
@@ -80,17 +77,17 @@ public class RideRequest {
      *
      * @return the ending location
      */
-    public Location getEnd() {
-        return end;
+    public Place getEndPlace() {
+        return endPlace;
     }
 
     /**
      * Sets end.
      *
-     * @param end the ending location
+     * @param endPlace the ending location
      */
-    public void setEnd(Location end) {
-        this.end = end;
+    public void setEndPlace(Place endPlace) {
+        this.endPlace = endPlace;
     }
 
     /**
@@ -116,17 +113,17 @@ public class RideRequest {
      *
      * @return the driver involved
      */
-    public Driver getDriver() {
-        return driver;
+    public String getDriverUid() {
+        return driverUid;
     }
 
     /**
      * Sets driver.
      *
-     * @param driver the driver involved
+     * @param driverUid the driver involved
      */
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public void setDriverUid(String driverUid) {
+        this.driverUid = driverUid;
     }
 
     /**
@@ -134,17 +131,17 @@ public class RideRequest {
      *
      * @return the rider involved
      */
-    public Rider getRider() {
-        return rider;
+    public String getRiderUid() {
+        return riderUid;
     }
 
     /**
      * Sets rider.
      *
-     * @param rider the rider involved
+     * @param riderUid the rider involved
      */
-    public void setRider(Rider rider) {
-        this.rider = rider;
+    public void setRiderUid(String riderUid) {
+        this.riderUid = riderUid;
     }
 
     /**

@@ -59,9 +59,9 @@ public class RequestOfferedFragment extends Fragment {
         switch (role) {
             case "Rider":
                 // Set values of info box
-                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
-                phoneTextView.setText(rideRequest.getDriver().getPhone());
-                emailTextView.setText(rideRequest.getDriver().getEmail());
+//                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
+//                phoneTextView.setText(rideRequest.getDriver().getPhone());
+//                emailTextView.setText(rideRequest.getDriver().getEmail());
 
                 // Rider can click Accept or Decline to the driver's offer
                 acceptOfferButton.setOnClickListener(new View.OnClickListener()
@@ -85,9 +85,9 @@ public class RequestOfferedFragment extends Fragment {
 
             case "Driver":
                 // Set values of info box
-                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
-                phoneTextView.setText(rideRequest.getRider().getPhone());
-                emailTextView.setText(rideRequest.getRider().getEmail());
+//                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
+//                phoneTextView.setText(rideRequest.getRider().getPhone());
+//                emailTextView.setText(rideRequest.getRider().getEmail());
 
                 // Show decline/accept offer buttons only for Riders
                 acceptOfferButton.setVisibility(View.INVISIBLE);
