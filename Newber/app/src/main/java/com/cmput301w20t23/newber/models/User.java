@@ -12,6 +12,7 @@ public class User {
     private String phone;
     private String email;
     private String uId;
+    private String currRequestId;
 
     /**
      * Instantiates a new User.
@@ -23,6 +24,7 @@ public class User {
      * @param email     the email
      * @param uId       the user id
      */
+
     public User(String firstName, String lastName, String username, String phone, String email, String uId) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,6 +32,7 @@ public class User {
         this.phone = phone;
         this.email = email;
         this.uId = uId;
+        this.currRequestId = "";
     }
 
     /**
@@ -121,5 +124,9 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getCurrentRequestId() { return this.currRequestId; }
+
+    public void setCurrentRequestId(String currRequestId) { this.currRequestId = currRequestId; }
 
 }

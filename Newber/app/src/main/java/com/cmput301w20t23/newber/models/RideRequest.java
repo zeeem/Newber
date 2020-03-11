@@ -18,6 +18,8 @@ public class RideRequest {
     private String riderUid;
     private double cost;
 
+    public RideRequest() {}
+
     /**
      * Instantiates a new Ride request.
      *
@@ -33,6 +35,17 @@ public class RideRequest {
         this.status = RequestStatus.PENDING;
         this.riderUid = riderUid;
         this.driverUid = "";
+        this.cost = cost;
+    }
+
+<<<<<<< HEAD
+    public RideRequest(String requestId, Location startLocation, Location endLocation, RequestStatus status, String riderUid, String driverUid, double cost) {
+        this.requestId = requestId;
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+        this.status = status;
+        this.riderUid = riderUid;
+        this.driverUid = driverUid;
         this.cost = cost;
     }
 
