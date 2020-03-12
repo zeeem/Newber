@@ -1,11 +1,14 @@
 package com.cmput301w20t23.newber.views;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
@@ -54,7 +57,7 @@ public class RequestAcceptedFragment extends Fragment {
         // Set view elements
 //        pickupLocationTextView.setText(rideRequest.getStart().getName());
 //        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
-        fareTextView.setText(Double.toString(rideRequest.getCost()));
+        // fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Change UI based on role
         switch(role)
@@ -76,6 +79,26 @@ public class RequestAcceptedFragment extends Fragment {
                         // TODO: If rider, remove driver from request and set status to PENDING
                     }
                 });
+
+                ImageButton callButton = view.findViewById(R.id.call_button);
+                ImageButton emailButton = view.findViewById(R.id.email_button);
+                callButton.setVisibility(View.VISIBLE);
+                emailButton.setVisibility(View.VISIBLE);
+
+                callButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToCallScreen();
+                    }
+                });
+
+                emailButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToMailScreen();
+                    }
+                });
+
                 break;
 
             case "Driver": // Rider Picked Up button
@@ -102,5 +125,28 @@ public class RequestAcceptedFragment extends Fragment {
         name.setOnClickListener(new NameOnClickListener(role));
 
         return view;
+    }
+
+    /**
+     * Opens Android call screen and populates it with the driver's phone number when the
+     * appropriate button is clicked.
+     */
+    public void goToCallScreen() {
+        // TODO: replace dummy phone with driver's phone
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "7801234567"));
+        this.startActivity(callIntent);
+    }
+
+    /**
+     * Opens Android mail screen and populates it with the driver's email address when the
+     * appropriate button is clicked.
+     */
+    public void goToMailScreen() {
+        // TODO: replace dummy email with driver's email
+        Intent mailIntent = new Intent(Intent.ACTION_SEND);
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"driver@example.com"});
+        mailIntent.setType("message/rfc822");
+        this.startActivity(Intent.createChooser(mailIntent,
+                "Send email using: "));
     }
 }
