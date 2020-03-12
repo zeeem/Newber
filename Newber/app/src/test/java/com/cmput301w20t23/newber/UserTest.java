@@ -53,4 +53,11 @@ public class UserTest {
         testUser.setEmail("test@test.ca");
         assertEquals("test@test.ca", testUser.getEmail());
     }
+
+    @Test
+    public void testSetAndGetCurrentRequestId() {
+        assertEquals("", testUser.getCurrentRequestId());
+        testUser.setCurrentRequestId("123456");
+        assertEquals("123456", testUser.getCurrentRequestId());
+    }
 }
