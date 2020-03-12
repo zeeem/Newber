@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.controllers.RideController;
 import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
@@ -27,6 +29,7 @@ public class RequestOfferedFragment extends Fragment {
     private String role;
     private Rider rider;
     private Driver driver;
+    private RideController rideController;
 
     /**
      * Instantiates a new RequestOfferedFragment.
@@ -79,7 +82,8 @@ public class RequestOfferedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: Leave driver attached to request on firebase and set request status to ACCEPTED
-
+                        rideRequest.setStatus(RequestStatus.ACCEPTED);
+//                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 
@@ -89,6 +93,9 @@ public class RequestOfferedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: Request status returns to PENDING and remove driver from request on Firebase
+                        rideRequest.setStatus(RequestStatus.PENDING);
+                        rideRequest.setDriverUid("");
+//                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 

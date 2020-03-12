@@ -26,4 +26,10 @@ public class RideController {
                 .child("currentRequestId")
                 .setValue(requestId);
     }
+
+    public void removeRideRequest(RideRequest rideRequest) {
+        // Remove request from firebase requests table
+        FirebaseDatabase.getInstance().getReference("rideRequests")
+                .child(rideRequest.getRequestId()).removeValue();
+    }
 }

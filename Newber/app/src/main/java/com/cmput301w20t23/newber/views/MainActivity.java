@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 case PENDING:
                     statusBanner.setText("Requested");
                     statusBanner.setBackgroundColor(Color.RED);
-                    riderFragment = new RequestPendingFragment(currRequest);
+                    riderFragment = new RequestPendingFragment(currRequest, rider);
                     break;
                 case OFFERED:
                     statusBanner.setText("Offered");
