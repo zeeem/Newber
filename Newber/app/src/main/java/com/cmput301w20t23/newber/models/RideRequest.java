@@ -1,7 +1,10 @@
 package com.cmput301w20t23.newber.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.libraries.places.api.model.Place;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -9,7 +12,7 @@ import java.util.UUID;
  *
  * @author Jessica D'Cunha, Gaurav Sekhar
  */
-public class RideRequest {
+public class RideRequest implements Serializable {
     private String requestId;
     private Location startLocation;
     private Location endLocation;
@@ -18,7 +21,9 @@ public class RideRequest {
     private String riderUid;
     private double cost;
 
-    public RideRequest() {}
+    public RideRequest() {
+
+    }
 
     /**
      * Instantiates a new Ride request.
@@ -28,8 +33,8 @@ public class RideRequest {
      * @param riderUid      the rider involved
      * @param cost          the cost of the ride
      */
-    public RideRequest(Place startPlace, Place endPlace, String riderUid, double cost) {
-        this.requestId = UUID.randomUUID().toString();
+    public RideRequest(String requestId, Place startPlace, Place endPlace, String riderUid, double cost) {
+        this.requestId = requestId;
         this.startLocation = new Location(startPlace);
         this.endLocation = new Location(endPlace);
         this.status = RequestStatus.PENDING;
@@ -172,5 +177,11 @@ public class RideRequest {
      */
     public void setCost(double cost) {
         this.cost = cost;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Pick up at: " + startLocation.getName();
     }
 }
