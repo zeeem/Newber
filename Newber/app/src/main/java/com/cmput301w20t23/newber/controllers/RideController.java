@@ -1,10 +1,10 @@
 package com.cmput301w20t23.newber.controllers;
-
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
 import com.cmput301w20t23.newber.models.RequestStatus;
+import com.cmput301w20t23.newber.models.Location;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.views.DriverRequestActivity;
@@ -30,14 +30,13 @@ public class RideController {
         this.mAuth = FirebaseAuth.getInstance();
     }
 
-    public void createRideRequest(Place startPlace, Place endPlace, double cost) {
-        String requestId = database.getReference("rideRequests").push().getKey();
+    public void createRideRequest(final Location startLocation, final Location endLocation, double cost) {
         String riderUid = this.mAuth.getCurrentUser().getUid();
-        RideRequest rideRequest = new RideRequest(requestId, startPlace, endPlace, riderUid, cost);
+        RideRequest rideRequest = new RideRequest(startLocation, endLocation, riderUid, cost);
         database.getReference("rideRequests")
-                .child(requestId)
+                .child(rideRequest.getRequestId())
                 .setValue(rideRequest);
-        updateUserCurrentRequest(rideRequest.getRequestId());
+        database.getReference("users").child(riderUid).child("currentRequestId").setValue(rideRequest.getRequestId());
     }
 
     public void removeRideRequest(RideRequest rideRequest) {
