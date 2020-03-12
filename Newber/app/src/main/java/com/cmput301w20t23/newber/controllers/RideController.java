@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.views.DriverRequestActivity;
@@ -48,6 +49,7 @@ public class RideController {
     public void updateDriverAndRequest(RideRequest request) {
         String driverUid = this.mAuth.getCurrentUser().getUid();
         request.setDriverUid(driverUid);
+        request.setStatus(RequestStatus.OFFERED);
         updateRideRequest(request);
         updateUserCurrentRequest(request.getRequestId());
     }
