@@ -22,7 +22,6 @@ import com.cmput301w20t23.newber.models.Rider;
 public class RequestPendingFragment extends Fragment {
 
     private RideRequest rideRequest;
-    private Rider rider;
 
     /**
      * Instantiate User and RideRequest controllers
@@ -35,9 +34,8 @@ public class RequestPendingFragment extends Fragment {
      *
      * @param request the current request
      */
-    public RequestPendingFragment(RideRequest request, Rider rider) {
+    public RequestPendingFragment(RideRequest request) {
         this.rideRequest = request;
-        this.rider = rider;
     }
 
     @Override
@@ -67,8 +65,8 @@ public class RequestPendingFragment extends Fragment {
                 rideController.removeRideRequest(rideRequest);
 
                 // Remove current request ID from firebase user entry
-                rider.setCurrentRequestId("");
-                userController.updateUserCurrentRequestId(rider);
+                rideRequest.getRider().setCurrentRequestId("");
+                userController.updateUserCurrentRequestId(rideRequest.getRider());
             }
         });
         return view;

@@ -28,13 +28,13 @@ public class RideController {
         this.mAuth = FirebaseAuth.getInstance();
     }
 
-    public void createRideRequest(final Location startLocation, final Location endLocation, double cost) {
-        String riderUid = this.mAuth.getCurrentUser().getUid();
-        RideRequest rideRequest = new RideRequest(startLocation, endLocation, riderUid, cost);
+    public void createRideRequest(final Location startLocation, final Location endLocation, double cost, Rider rider) {
+        RideRequest rideRequest = new RideRequest(startLocation, endLocation, rider, cost);
+        rider.setCurrentRequestId(rideRequest.getRequestId());
         database.getReference("rideRequests")
                 .child(rideRequest.getRequestId())
                 .setValue(rideRequest);
-        database.getReference("users").child(riderUid).child("currentRequestId").setValue(rideRequest.getRequestId());
+        database.getReference("users").child(rider.getUid()).child("currentRequestId").setValue(rideRequest.getRequestId());
     }
 
     public void removeRideRequest(RideRequest rideRequest) {
@@ -44,8 +44,6 @@ public class RideController {
     }
 
     public void updateDriverAndRequest(RideRequest request) {
-        String driverUid = this.mAuth.getCurrentUser().getUid();
-        request.setDriverUid(driverUid);
         request.setStatus(RequestStatus.OFFERED);
         updateRideRequest(request);
         updateUserCurrentRequest(request.getRequestId());

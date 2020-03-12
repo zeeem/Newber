@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.Location;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,12 +35,14 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
     private GoogleMap googleMap;
     private RideRequest request;
     private RideController rideController;
+    private Driver driver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_accept_request);
         request = (RideRequest) getIntent().getSerializableExtra("request");
+        driver = (Driver) getIntent().getSerializableExtra("driver");
         rideController = new RideController();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -95,6 +98,7 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
 
     public void acceptRequest(View view) {
         setResult(Activity.RESULT_OK, new Intent());
+        request.setDriver(driver);
         rideController.updateDriverAndRequest(request);
         finish();
     }

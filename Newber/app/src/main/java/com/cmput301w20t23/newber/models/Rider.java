@@ -1,11 +1,13 @@
 package com.cmput301w20t23.newber.models;
 
+import java.io.Serializable;
+
 /**
  * Describes the Rider type of user.
  *
  * @author Jessica D'Cunha, Gaurav Sekhar
  */
-public class Rider extends User {
+public class Rider extends User implements Serializable {
 
     RideRequest currentRequest;
 
@@ -26,6 +28,8 @@ public class Rider extends User {
         this.setCurrentRequestId(currentRequestId);
         this.currentRequest = null;
     }
+
+    public Rider() {}
 
     public void setCurrentRequest(RideRequest request) { this.currentRequest = request; }
 

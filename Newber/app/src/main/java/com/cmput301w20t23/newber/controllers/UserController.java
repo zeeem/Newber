@@ -246,11 +246,7 @@ public class UserController {
      * Updates user entry with contents of the user
      * @param user user model
      */
-    public void updateUserInfo(User user) {
-        FirebaseDatabase.getInstance().getReference("users")
-                .child(user.getUid())
-                .setValue(user);
-
+    public void updateUserCurrentRequestId(User user) {
         FirebaseDatabase.getInstance().getReference("users")
                 .child(user.getUid())
                 .child("currentRequestId")

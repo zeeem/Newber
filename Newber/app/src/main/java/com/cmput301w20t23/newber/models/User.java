@@ -1,11 +1,13 @@
 package com.cmput301w20t23.newber.models;
 
+import java.io.Serializable;
+
 /**
  * Describes a user of the app.
  *
  * @author Jessica D'Cunha, Gaurav Sekhar
  */
-public class User {
+public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String username;
@@ -34,6 +36,8 @@ public class User {
         this.uId = uId;
         this.currRequestId = "";
     }
+
+    public User() {}
 
     /**
      * Gets first name.
