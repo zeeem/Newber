@@ -24,6 +24,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * The Android Activity that acts as the main user screen of the app.
@@ -99,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 currRequest = dataSnapshot.getValue(RideRequest.class);
+//                                updateUsers();
                                 displayFragment();
                             }
                         }
@@ -119,6 +123,72 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void updateUsers() {
+        switch (role) {
+            case "Rider":
+                // Get information of driver associated with current request
+                System.out.println("driver uid is: " + currRequest.getDriverUid());
+                if (currRequest.getDriverUid() != null && !currRequest.getDriverUid().isEmpty()) {
+                    System.out.println("I'm in");
+                    database.getReference("users").child(currRequest.getDriverUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            firstName = dataSnapshot.child("firstName").getValue(String.class);
+                            lastName = dataSnapshot.child("lastName").getValue(String.class);
+                            username = dataSnapshot.child("username").getValue(String.class);
+                            phone = dataSnapshot.child("phone").getValue(String.class);
+                            email = dataSnapshot.child("email").getValue(String.class);
+                            uId = currRequest.getDriverUid();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    database.getReference("drivers").child(currRequest.getDriverUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Rating rating = dataSnapshot.getValue(Rating.class);
+                            System.out.println("before driver make, username is: " + username);
+                            driver = new Driver(firstName, lastName, username, phone, email, uId, currRequest.getRequestId(), rating);
+                            System.out.println("driver added from rider");
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+                break;
+
+            case "Driver":
+                // Get rider associated with current request
+                System.out.println("in the rider");
+                database.getReference("users").child(currRequest.getRiderUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        System.out.println("In datachange");
+                        firstName = dataSnapshot.child("firstName").getValue(String.class);
+                        lastName = dataSnapshot.child("lastName").getValue(String.class);
+                        username = dataSnapshot.child("username").getValue(String.class);
+                        phone = dataSnapshot.child("phone").getValue(String.class);
+                        email = dataSnapshot.child("email").getValue(String.class);
+                        uId = currRequest.getRiderUid();
+                        rider = new Rider(firstName, lastName, username, phone, email, uId, currRequest.getRequestId());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                break;
+        }
     }
 
     public void displayFragment() {
@@ -143,8 +213,14 @@ public class MainActivity extends AppCompatActivity {
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
+<<<<<<< HEAD
                     System.out.println(user);
                     riderFragment = new RequestOfferedFragment(currRequest, role);
+=======
+                    updateUsers();
+                    System.out.println(driver);
+                    riderFragment = new RequestOfferedFragment(currRequest, role, rider, driver);
+>>>>>>> debugging
                     break;
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
