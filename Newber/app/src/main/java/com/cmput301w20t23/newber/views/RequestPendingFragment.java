@@ -68,7 +68,7 @@ public class RequestPendingFragment extends Fragment {
 
                 // Remove current request ID from firebase user entry
                 rider.setCurrentRequestId("");
-                userController.updateUserInfo(rider);
+                userController.updateUserCurrentRequestId(rider);
             }
         });
         return view;

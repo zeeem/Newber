@@ -98,7 +98,7 @@ public class RequestInProgressFragment extends Fragment {
                     {
                         // TODO: Set request status to COMPLETED and move Driver to PAYMENT screen
                         rideRequest.setStatus(RequestStatus.COMPLETED);
-//                        rideController.updateRideRequest(rideRequest);
+                        rideController.updateRideRequest(rideRequest);
 
                         // TODO: Start DriverPaymentActivity
                     }
