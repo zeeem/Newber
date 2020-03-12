@@ -88,7 +88,8 @@ public class RequestAcceptedFragment extends Fragment {
                     @Override
                     public void onClick(View v)
                     {
-                        // TODO: If rider, remove driver from request and set status to PENDING
+                        // If rider, remove driver from request and set status to PENDING
+                        userController.removeUserCurrentRequestId(rideRequest.getDriver());
                         rideRequest.setDriver(null);
                         rideRequest.setStatus(RequestStatus.PENDING);
                         rideController.updateRideRequest(rideRequest);
