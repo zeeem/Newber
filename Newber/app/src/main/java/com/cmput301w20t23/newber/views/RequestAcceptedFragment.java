@@ -94,7 +94,7 @@ public class RequestAcceptedFragment extends Fragment {
                         // TODO: If rider, remove driver from request and set status to PENDING
                         rideRequest.setDriverUid("");
                         rideRequest.setStatus(RequestStatus.PENDING);
-//                        rideController.updateRideRequest(rideRequest);
+                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 
@@ -137,7 +137,7 @@ public class RequestAcceptedFragment extends Fragment {
                     {
                         // TODO: If driver, set request status to IN_PROGRESS
                         rideRequest.setStatus(RequestStatus.IN_PROGRESS);
-//                        rideController.updateRideRequest(rideRequest);
+                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 

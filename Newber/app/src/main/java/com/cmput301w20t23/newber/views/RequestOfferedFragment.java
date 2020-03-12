@@ -12,10 +12,18 @@ import com.cmput301w20t23.newber.controllers.NameOnClickListener;
 import com.cmput301w20t23.newber.controllers.RideController;
 import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.CountDownLatch;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -102,7 +110,7 @@ public class RequestOfferedFragment extends Fragment {
                         rideRequest.setDriverUid("");
                         rideController.updateRideRequest(rideRequest);
                         driver.setCurrentRequestId("");
-                        userController.updateUserInfo(driver);
+                        userController.updateUserCurrentRequestId(driver);
                     }
                 });
 
