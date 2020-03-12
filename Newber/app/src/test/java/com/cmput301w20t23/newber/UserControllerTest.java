@@ -26,6 +26,9 @@ public class UserControllerTest {
         testAuth = testAuth.getInstance();
     }
 
+    /**first tests the false case, where either email or pass contains only space chars,
+     * then the true case where both have at least one non-space char
+     */
     @Test
     public void testIsLoginValid(){
         String testEmail = " ";
@@ -39,6 +42,10 @@ public class UserControllerTest {
         assertEquals(true, testResult);
     }
 
+    /**
+     * checks each false case in order: where role is invalid, then the phone number, then email
+     * then matching passwords, finally the true case, where none of the above happens
+     */
     @Test
     public void testIsSignUpValid(){
         String role = " ";
@@ -72,8 +79,10 @@ public class UserControllerTest {
         assertEquals(true, testResult);
     }
 
-    //I am unsure if logout and create user can be tested; reliant entirely on firebase
-
+    /**
+     * similar to testIsLoginValid(), this checks the false case and then the true case
+     * of email and phone input
+     */
     @Test
     public void testIsContactInfoValid(){
         String email = "not an email";
@@ -86,7 +95,4 @@ public class UserControllerTest {
         testResult = testController.isContactInfoValid(email, phone);
         assertEquals(true, testResult);
     }
-
-    //Again, unsure if save contact info can be tested since it is in firebase
-
 }
