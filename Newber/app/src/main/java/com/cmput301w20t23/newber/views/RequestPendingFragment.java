@@ -1,6 +1,5 @@
 package com.cmput301w20t23.newber.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,7 @@ import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.RideController;
 import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.RideRequest;
-import com.cmput301w20t23.newber.models.Location;
 import com.cmput301w20t23.newber.models.Rider;
-import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * The Android Fragment that is shown when the user has a pending current ride request.
@@ -26,8 +23,12 @@ public class RequestPendingFragment extends Fragment {
 
     private RideRequest rideRequest;
     private Rider rider;
-    private RideController rideController;
-    private UserController userController;
+
+    /**
+     * Instantiate User and RideRequest controllers
+     */
+    private RideController rideController = new RideController();
+    private UserController userController = new UserController(this.getContext());
 
     /**
      * Instantiates a new RequestPendingFragment.

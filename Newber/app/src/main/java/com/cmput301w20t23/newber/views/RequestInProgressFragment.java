@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.controllers.RideController;
 import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 
@@ -26,6 +28,11 @@ public class RequestInProgressFragment extends Fragment {
     private String role;
     private Rider rider;
     private Driver driver;
+
+    /**
+     * Instantiate RideRequest controller
+     */
+    private RideController rideController = new RideController();
 
     /**
      * Instantiates a new RequestInProgressFragment.
@@ -90,6 +97,10 @@ public class RequestInProgressFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: Set request status to COMPLETED and move Driver to PAYMENT screen
+                        rideRequest.setStatus(RequestStatus.COMPLETED);
+//                        rideController.updateRideRequest(rideRequest);
+
+                        // TODO: Start DriverPaymentActivity
                     }
                 });
 

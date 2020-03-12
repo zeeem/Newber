@@ -29,7 +29,11 @@ public class RequestOfferedFragment extends Fragment {
     private String role;
     private Rider rider;
     private Driver driver;
-    private RideController rideController;
+
+    /**
+     * Instantiate RideRequest controller
+     */
+    private RideController rideController = new RideController();
 
     /**
      * Instantiates a new RequestOfferedFragment.

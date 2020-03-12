@@ -129,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment riderFragment = null;
         TextView statusBanner = findViewById(R.id.main_status_banner);
 
+        System.out.println("the role is: " + role);
+
         if (currRequest == null) {
             // if current user has no request attached, use "no current request" fragment
             statusBanner.setText("No Request");

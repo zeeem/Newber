@@ -13,7 +13,10 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 
@@ -30,6 +33,12 @@ public class RequestAcceptedFragment extends Fragment {
     private String role;
     private Rider rider;
     private Driver driver;
+
+    /**
+     * Instantiate User and RideRequest controllers
+     */
+    private RideController rideController = new RideController();
+    private UserController userController = new UserController(this.getContext());
 
     /**
      * Instantiates a new RequestAcceptedFragment.
@@ -83,6 +92,9 @@ public class RequestAcceptedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: If rider, remove driver from request and set status to PENDING
+                        rideRequest.setDriverUid("");
+                        rideRequest.setStatus(RequestStatus.PENDING);
+//                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 
@@ -124,6 +136,8 @@ public class RequestAcceptedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: If driver, set request status to IN_PROGRESS
+                        rideRequest.setStatus(RequestStatus.IN_PROGRESS);
+//                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 
