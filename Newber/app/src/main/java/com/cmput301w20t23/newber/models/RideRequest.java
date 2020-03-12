@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Describes a request for a ride.
  *
- * @author Jessica D'Cunha, Gaurav Sekhar
+ * @author Jessica D'Cunha, Gaurav Sekhar, Ibrahim Aly
  */
 public class RideRequest implements Serializable {
     private String requestId;
@@ -28,16 +28,15 @@ public class RideRequest implements Serializable {
     /**
      * Instantiates a new Ride request.
      *
-     * @param requestId     the unique request id
-     * @param startPlace    the starting location
-     * @param endPlace      the end location
+     * @param startLocation    the starting location
+     * @param endLocation      the end location
      * @param riderUid      the rider involved
      * @param cost          the cost of the ride
      */
-    public RideRequest(String requestId, Place startPlace, Place endPlace, String riderUid, double cost) {
-        this.requestId = requestId;
-        this.startLocation = new Location(startPlace);
-        this.endLocation = new Location(endPlace);
+    public RideRequest(Location startLocation, Location endLocation, String riderUid, double cost) {
+        this.requestId = UUID.randomUUID().toString();
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
         this.status = RequestStatus.PENDING;
         this.riderUid = riderUid;
         this.driverUid = "";

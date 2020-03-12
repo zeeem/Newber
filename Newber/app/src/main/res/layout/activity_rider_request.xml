@@ -38,7 +38,8 @@
             android:text="MAP"
             android:layout_weight="1"
             android:textColor="@color/colorWhite"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"
+            android:id="@+id/from_map_button"/>
     </LinearLayout>
 
     <LinearLayout
@@ -73,7 +74,8 @@
             android:text="MAP"
             android:layout_weight="1"
             android:textColor="@color/colorWhite"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"
+            android:id="@+id/to_map_button"/>
     </LinearLayout>
 
     <LinearLayout
