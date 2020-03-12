@@ -1,5 +1,8 @@
 package com.cmput301w20t23.newber.models;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 
 public class Location {
@@ -37,5 +40,17 @@ public class Location {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public void setLocationFromLatLng(LatLng latLng, String name) {
+        this.latitude = latLng.latitude;
+        this.longitude = latLng.longitude;
+        this.name = name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.name + ": " + this.latitude + ", " + this.longitude;
     }
 }

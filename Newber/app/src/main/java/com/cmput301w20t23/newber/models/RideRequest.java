@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Describes a request for a ride.
  *
- * @author Jessica D'Cunha, Gaurav Sekhar
+ * @author Jessica D'Cunha, Gaurav Sekhar, Ibrahim Aly
  */
 public class RideRequest {
     private String requestId;
@@ -23,15 +23,15 @@ public class RideRequest {
     /**
      * Instantiates a new Ride request.
      *
-     * @param startPlace    the starting location
-     * @param endPlace      the end location
+     * @param startLocation    the starting location
+     * @param endLocation      the end location
      * @param riderUid      the rider involved
      * @param cost          the cost of the ride
      */
-    public RideRequest(Place startPlace, Place endPlace, String riderUid, double cost) {
+    public RideRequest(Location startLocation, Location endLocation, String riderUid, double cost) {
         this.requestId = UUID.randomUUID().toString();
-        this.startLocation = new Location(startPlace);
-        this.endLocation = new Location(endPlace);
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
         this.status = RequestStatus.PENDING;
         this.riderUid = riderUid;
         this.driverUid = "";

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("changed");
 
                 // Use User.currRequestId to get RideRequest object from requests table
-                if (currentRequestId != null) {
+                if (!currentRequestId.isEmpty()) {
                     System.out.println("currReqId not null");
 
                     database.getReference("rideRequests")
