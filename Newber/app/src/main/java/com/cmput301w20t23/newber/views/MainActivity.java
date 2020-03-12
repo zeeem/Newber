@@ -19,11 +19,15 @@ import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * The Android Activity that acts as the main user screen of the app.
@@ -99,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 currRequest = dataSnapshot.getValue(RideRequest.class);
+//                                updateUsers();
                                 displayFragment();
                             }
                         }
@@ -143,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
-//                    updateUsers();
                     System.out.println(user);
                     riderFragment = new RequestOfferedFragment(currRequest, role);
                     break;
