@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.RideController;
 import com.cmput301w20t23.newber.models.Location;
+import com.cmput301w20t23.newber.models.Rider;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -299,7 +301,10 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             return;
         }
 
-        rideController.createRideRequest(startLocation, endLocation, 10.00);
+        Intent intent = getIntent();
+        Rider rider = (Rider) intent.getSerializableExtra("rider");
+        System.out.println("rider username:" + rider.getUsername());
+        rideController.createRideRequest(startLocation, endLocation, 10.00, rider);
         finish();
     }
 }

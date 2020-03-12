@@ -1,10 +1,5 @@
 package com.cmput301w20t23.newber.views;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.cmput301w20t23.newber.R;
-import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,6 +37,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 public class DriverRequestActivity extends AppCompatActivity implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -61,6 +61,10 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_request);
+
+        Intent parentIntent = getIntent();
+        final Driver driver = (Driver) parentIntent.getSerializableExtra("driver");
+
         mainLayout = findViewById(R.id.main_layout);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -77,6 +81,8 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getBaseContext(), DriverAcceptRequestActivity.class);
                 intent.putExtra("request", requestListAdapter.getItem(i));
+                System.out.println("From driver request activity: " + driver.getUsername());
+                intent.putExtra("driver", driver);
                 startActivityForResult(intent, DRIVER_ACCEPT_REQUEST);
             }
         });

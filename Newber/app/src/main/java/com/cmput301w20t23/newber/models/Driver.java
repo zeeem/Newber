@@ -1,11 +1,13 @@
 package com.cmput301w20t23.newber.models;
 
+import java.io.Serializable;
+
 /**
  * Describes the Driver type of user.
  *
  * @author Jessica D'Cunha, Gaurav Sekhar
  */
-public class Driver extends User {
+public class Driver extends User implements Serializable {
     private Rating rating;
     private RideRequest currentRequest;
 
@@ -27,6 +29,8 @@ public class Driver extends User {
         this.currentRequest = null;
         this.setCurrentRequestId(currRequestId);
     }
+
+    public Driver() {}
 
     public void setRating(Rating rating) { this.rating = rating; }
 

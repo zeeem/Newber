@@ -19,6 +19,7 @@ import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
+import com.cmput301w20t23.newber.models.User;
 
 import androidx.fragment.app.Fragment;
 
@@ -31,8 +32,6 @@ public class RequestAcceptedFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
-    private Rider rider;
-    private Driver driver;
 
     /**
      * Instantiate User and RideRequest controllers
@@ -46,11 +45,9 @@ public class RequestAcceptedFragment extends Fragment {
      * @param request the user's current request
      * @param role    the user's role
      */
-    public RequestAcceptedFragment(RideRequest request, String role, Rider rider, Driver driver) {
+    public RequestAcceptedFragment(RideRequest request, String role) {
         this.rideRequest = request;
         this.role = role;
-        this.rider = rider;
-        this.driver = driver;
     }
 
     @Override
@@ -82,9 +79,9 @@ public class RequestAcceptedFragment extends Fragment {
                 button.setText("Cancel");
 
                 // Set values of info box
-                nameTextView.setText(driver.getUsername());
-                phoneTextView.setText(driver.getPhone());
-                emailTextView.setText(driver.getEmail());
+                nameTextView.setText(rideRequest.getDriver().getUsername());
+                phoneTextView.setText(rideRequest.getDriver().getPhone());
+                emailTextView.setText(rideRequest.getDriver().getEmail());
 
                 button.setOnClickListener(new View.OnClickListener()
                 {
@@ -92,7 +89,7 @@ public class RequestAcceptedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: If rider, remove driver from request and set status to PENDING
-                        rideRequest.setDriverUid("");
+                        rideRequest.setDriver(null);
                         rideRequest.setStatus(RequestStatus.PENDING);
                         rideController.updateRideRequest(rideRequest);
                     }
@@ -118,7 +115,7 @@ public class RequestAcceptedFragment extends Fragment {
                 });
 
                 // Bring up profile when name is clicked
-                nameTextView.setOnClickListener(new NameOnClickListener(role, driver));
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getDriver()));
                 break;
 
             case "Driver": // Rider Picked Up button
@@ -126,9 +123,9 @@ public class RequestAcceptedFragment extends Fragment {
                 button.setText("Rider picked up");
 
                 // Set values of info box
-                nameTextView.setText(rider.getUsername());
-                phoneTextView.setText(rider.getPhone());
-                emailTextView.setText(rider.getEmail());
+                nameTextView.setText(rideRequest.getRider().getUsername());
+                phoneTextView.setText(rideRequest.getRider().getPhone());
+                emailTextView.setText(rideRequest.getRider().getEmail());
 
                 button.setOnClickListener(new View.OnClickListener()
                 {
@@ -142,7 +139,7 @@ public class RequestAcceptedFragment extends Fragment {
                 });
 
                 // Bring up profile when name is clicked
-                nameTextView.setOnClickListener(new NameOnClickListener(role, rider));
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getRider()));
                 break;
         }
 

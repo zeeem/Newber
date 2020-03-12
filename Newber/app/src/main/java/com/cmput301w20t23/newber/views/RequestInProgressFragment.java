@@ -26,8 +26,6 @@ public class RequestInProgressFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
-    private Rider rider;
-    private Driver driver;
 
     /**
      * Instantiate RideRequest controller
@@ -39,14 +37,10 @@ public class RequestInProgressFragment extends Fragment {
      *
      * @param request the current request
      * @param role    the user's role
-     * @param rider   the rider attached to the request
-     * @param driver  the driver attached to the request
      */
-    public RequestInProgressFragment(RideRequest request, String role, Rider rider, Driver driver) {
+    public RequestInProgressFragment(RideRequest request, String role) {
         this.rideRequest = request;
         this.role = role;
-        this.rider = rider;
-        this.driver = driver;
     }
 
     @Override
@@ -74,22 +68,22 @@ public class RequestInProgressFragment extends Fragment {
         {
             case "Rider":
                 // Set values of info box
-                nameTextView.setText(driver.getUsername());
-                phoneTextView.setText(driver.getPhone());
-                emailTextView.setText(driver.getEmail());
+                nameTextView.setText(rideRequest.getDriver().getUsername());
+                phoneTextView.setText(rideRequest.getDriver().getPhone());
+                emailTextView.setText(rideRequest.getDriver().getEmail());
 
                 // Complete ride button only visible by driver; rider hides it
                 completeButton.setVisibility(View.INVISIBLE);
 
                 // Bring up profile when name is clicked
-                nameTextView.setOnClickListener(new NameOnClickListener(role, driver));
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getDriver()));
                 break;
 
             case "Driver":
                 // Set values of info box
-                nameTextView.setText(rider.getUsername());
-                phoneTextView.setText(rider.getPhone());
-                emailTextView.setText(rider.getEmail());
+                nameTextView.setText(rideRequest.getRider().getUsername());
+                phoneTextView.setText(rideRequest.getRider().getPhone());
+                emailTextView.setText(rideRequest.getRider().getEmail());
 
                 completeButton.setOnClickListener(new View.OnClickListener()
                 {
@@ -105,7 +99,7 @@ public class RequestInProgressFragment extends Fragment {
                 });
 
                 // Bring up profile when name is clicked
-                nameTextView.setOnClickListener(new NameOnClickListener(role, rider));
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getRider()));
                 break;
         }
 
