@@ -26,7 +26,8 @@ public class UserControllerTest {
         testAuth = testAuth.getInstance();
     }
 
-    /**first tests the false case, where either email or pass contains only space chars,
+    /**
+     * first tests the false case, where either email or pass contains only space chars,
      * then the true case where both have at least one non-space char
      */
     @Test
