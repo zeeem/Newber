@@ -6,13 +6,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.models.RideRequest;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
@@ -27,34 +32,35 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.SphericalUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-/**
- * The Android Activity that handles the creation of a ride request by a rider.
- *
- * @author Ibrahim Aly, Ayushi Patel
- */
-public class RiderRequestActivity extends AppCompatActivity implements OnMapReadyCallback,
+public class DriverRequestActivity extends AppCompatActivity implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
+
+    private static final int DRIVER_ACCEPT_REQUEST = 1;
 
     private GoogleMap googleMap;
     private View mainLayout;
     private static final int PERMISSION_REQUEST_LOCATION = 0;
 
+    private ArrayAdapter<RideRequest> requestListAdapter;
+    private ListView requestListView;
+
     private Place startPlace;
-    private Place endPlace;
-
     private Marker startMarker;
-    private Marker endMarker;
-
-    private RideController rideController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rider_request);
+        setContentView(R.layout.activity_driver_request);
         mainLayout = findViewById(R.id.main_layout);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -62,14 +68,36 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         mapFragment.getMapAsync(this);
 
         setUpAutoCompleteFragments();
-        rideController = new RideController();
+
+        requestListView = findViewById(R.id.request_list);
+        requestListAdapter = new ArrayAdapter<>(this, R.layout.request_list_content);
+        requestListView.setAdapter(requestListAdapter);
+        requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getBaseContext(), DriverAcceptRequestActivity.class);
+                intent.putExtra("request", requestListAdapter.getItem(i));
+                startActivityForResult(intent, DRIVER_ACCEPT_REQUEST);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DRIVER_ACCEPT_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
     }
 
     /**
      * Sets up auto complete fragments.
      */
     public void setUpAutoCompleteFragments() {
-        AutocompleteSupportFragment startAutocompleteSupportFragment = (AutocompleteSupportFragment)
+        final AutocompleteSupportFragment startAutocompleteSupportFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.start_autocomplete_fragment);
         startAutocompleteSupportFragment.setHint("Search");
 
@@ -85,36 +113,11 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
                 if (startMarker != null) {
                     startMarker.remove();
                 }
-                startMarker = googleMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Start"));
+                startMarker = googleMap.addMarker(new MarkerOptions().position(place.getLatLng()));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 12.0f));
                 startPlace = place;
-            }
 
-            @Override
-            public void onError(@NonNull Status status) {
-                System.out.println("An error occurred: " + status);
-            }
-        });
-
-        AutocompleteSupportFragment endAutocompleteSupportFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.end_autocomplete_fragment);
-        endAutocompleteSupportFragment.setHint("Search");
-
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), getString(R.string.API_KEY), Locale.CANADA);
-        }
-        endAutocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-
-        endAutocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                System.out.println("To Place: " + place.getName() + ", latlng: " + place.getLatLng());
-                if (endMarker != null) {
-                    endMarker.remove();
-                }
-                endMarker = googleMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("End"));
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),12.0f));
-                endPlace = place;
+                queryOpenRequests(startPlace);
             }
 
             @Override
@@ -151,7 +154,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
                 @Override
                 public void onClick(View view) {
                     // Request the permission
-                    ActivityCompat.requestPermissions(RiderRequestActivity.this,
+                    ActivityCompat.requestPermissions(DriverRequestActivity.this,
                             new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                             PERMISSION_REQUEST_LOCATION);
                 }
@@ -188,17 +191,45 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Edmonton, 10.0f));
     }
 
-    public void cancelRiderRequest(View view) {
-        finish();
+    private void queryOpenRequests(Place startPlace) {
+        double distanceCenterToCorner = 5000 * Math.sqrt(2.0);
+        LatLng southwestCorner =
+                SphericalUtil.computeOffset(startPlace.getLatLng(), distanceCenterToCorner, 225.0);
+        LatLng northeastCorner =
+                SphericalUtil.computeOffset(startPlace.getLatLng(), distanceCenterToCorner, 45.0);
+        final LatLngBounds searchBounds = new LatLngBounds(southwestCorner, northeastCorner);
+
+        // TODO: Sort by distance
+        FirebaseDatabase.getInstance().getReference("rideRequests").orderByChild("driverUid").equalTo("")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        ArrayList<RideRequest> openRequests = new ArrayList<RideRequest>();
+                        for (DataSnapshot requestSnapshot:dataSnapshot.getChildren()) {
+                            RideRequest request = requestSnapshot.getValue(RideRequest.class);
+                            LatLng startLatLng = new LatLng(request.getStartLocation().getLatitude(),
+                                    request.getStartLocation().getLongitude());
+                            if (searchBounds.contains(startLatLng)) {
+                                openRequests.add(request);
+                            }
+                        }
+                        updateRequestList(openRequests);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
-    public void confirmRiderRequest(View view) {
-        if ((startPlace == null) || (endPlace == null)) {
-            Toast.makeText(this, "Please select endpoints", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private void updateRequestList(ArrayList<RideRequest> openRequests) {
+        requestListAdapter.clear();
+        requestListAdapter.addAll(openRequests);
+        requestListAdapter.notifyDataSetChanged();
+    }
 
-        rideController.createRideRequest(startPlace, endPlace, 10.00);
+    public void cancelDriverRequest(View view) {
         finish();
     }
 }
