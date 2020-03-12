@@ -243,7 +243,7 @@ public class UserController {
     }
 
     /**
-     * Updates user entry with contents of the user
+     * Updates user entry with new currentRequestId
      * @param user user model
      */
     public void updateUserCurrentRequestId(User user) {
@@ -251,5 +251,16 @@ public class UserController {
                 .child(user.getUid())
                 .child("currentRequestId")
                 .setValue(user.getCurrentRequestId());
+    }
+
+    /**
+     * Updates user entry with contents of the user
+     * @param user user model
+     */
+    public void removeUserCurrentRequestId(User user) {
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(user.getUid())
+                .child("currentRequestId")
+                .setValue("");
     }
 }
