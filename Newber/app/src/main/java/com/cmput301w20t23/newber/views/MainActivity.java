@@ -19,19 +19,11 @@ import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.model.Place;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.concurrent.CountDownLatch;
 
 /**
  * The Android Activity that acts as the main user screen of the app.
@@ -151,14 +143,8 @@ public class MainActivity extends AppCompatActivity {
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
-<<<<<<< HEAD
                     System.out.println(user);
                     riderFragment = new RequestOfferedFragment(currRequest, role);
-=======
-//                    updateUsers();
-                    System.out.println(driver);
-                    riderFragment = new RequestOfferedFragment(currRequest, role, rider, driver);
->>>>>>> debugging...
                     break;
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
