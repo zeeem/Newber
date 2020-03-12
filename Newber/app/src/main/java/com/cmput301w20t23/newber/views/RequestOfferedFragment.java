@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
 import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
@@ -33,6 +34,7 @@ public class RequestOfferedFragment extends Fragment {
      * Instantiate RideRequest controller
      */
     private RideController rideController = new RideController();
+    private UserController userController = new UserController(this.getContext());
 
     /**
      * Instantiates a new RequestOfferedFragment.
@@ -54,7 +56,7 @@ public class RequestOfferedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // View for this fragment
-        View view = inflater.inflate(R.layout.pending_fragment, container, false);
+        View view = inflater.inflate(R.layout.offered_fragment, container, false);
 
         // Get view elements
         TextView pickupLocationTextView = view.findViewById(R.id.pickup_location);
@@ -86,7 +88,7 @@ public class RequestOfferedFragment extends Fragment {
                     {
                         // TODO: Leave driver attached to request on firebase and set request status to ACCEPTED
                         rideRequest.setStatus(RequestStatus.ACCEPTED);
-//                        rideController.updateRideRequest(rideRequest);
+                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 
@@ -98,7 +100,9 @@ public class RequestOfferedFragment extends Fragment {
                         // TODO: Request status returns to PENDING and remove driver from request on Firebase
                         rideRequest.setStatus(RequestStatus.PENDING);
                         rideRequest.setDriverUid("");
-//                        rideController.updateRideRequest(rideRequest);
+                        rideController.updateRideRequest(rideRequest);
+                        driver.setCurrentRequestId("");
+                        userController.updateUserInfo(driver);
                     }
                 });
 
