@@ -2,12 +2,16 @@ package com.cmput301w20t23.newber.models;
 
 import com.google.android.libraries.places.api.model.Place;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     private String name;
     private double latitude;
     private double longitude;
 
-    public Location() {}
+    public Location() {
+
+    }
 
     public Location(Place place) {
         this.name = place.getName();

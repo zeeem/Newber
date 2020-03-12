@@ -55,9 +55,8 @@ public class NoRequestFragment extends Fragment {
                     @Override
                     public void onClick(View v)
                     {
-                        // Start DriverSearchForRequest activity
-//                        Intent intent = new Intent(getActivity(), RiderRequestActivity.class);
-//                        startActivity(intent);
+                        Intent intent = new Intent(getActivity(), DriverRequestActivity.class);
+                        startActivity(intent);
                     }
                 });
                 break;
