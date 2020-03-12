@@ -132,10 +132,10 @@ public class MainActivity extends AppCompatActivity {
         switch (role) {
             case "Rider":
                 // Get information of driver associated with current request
-                System.out.println("driver uid is: " + currRequest.getDriverUid());
-                if (currRequest.getDriverUid() != null && !currRequest.getDriverUid().isEmpty()) {
+                System.out.println("driver uid is: " + currRequest.getDriver().getUid());
+                if (currRequest.getDriver().getUid() != null && !currRequest.getDriver().getUid().isEmpty()) {
                     System.out.println("I'm in");
-                    database.getReference("users").child(currRequest.getDriverUid()).addValueEventListener(new ValueEventListener() {
+                    database.getReference("users").child(currRequest.getDriver().getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             firstName = dataSnapshot.child("firstName").getValue(String.class);
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                             username = dataSnapshot.child("username").getValue(String.class);
                             phone = dataSnapshot.child("phone").getValue(String.class);
                             email = dataSnapshot.child("email").getValue(String.class);
-                            uId = currRequest.getDriverUid();
+                            uId = currRequest.getDriver().getUid();
                         }
 
                         @Override
@@ -152,12 +152,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    database.getReference("drivers").child(currRequest.getDriverUid()).addValueEventListener(new ValueEventListener() {
+                    database.getReference("drivers").child(currRequest.getDriver().getUid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Rating rating = dataSnapshot.getValue(Rating.class);
                             System.out.println("before driver make, username is: " + username);
-                            driver = new Driver(firstName, lastName, username, phone, email, uId, currRequest.getRequestId(), rating);
+                            user = new Driver(firstName, lastName, username, phone, email, uId, currRequest.getRequestId(), rating);
                             System.out.println("driver added from rider");
                         }
 
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             case "Driver":
                 // Get rider associated with current request
                 System.out.println("in the rider");
-                database.getReference("users").child(currRequest.getRiderUid()).addValueEventListener(new ValueEventListener() {
+                database.getReference("users").child(currRequest.getRider().getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         System.out.println("In datachange");
@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity {
                         username = dataSnapshot.child("username").getValue(String.class);
                         phone = dataSnapshot.child("phone").getValue(String.class);
                         email = dataSnapshot.child("email").getValue(String.class);
-                        uId = currRequest.getRiderUid();
-                        rider = new Rider(firstName, lastName, username, phone, email, uId, currRequest.getRequestId());
+                        uId = currRequest.getRider().getUid();
+                        user = new Rider(firstName, lastName, username, phone, email, uId, currRequest.getRequestId());
                     }
 
                     @Override
