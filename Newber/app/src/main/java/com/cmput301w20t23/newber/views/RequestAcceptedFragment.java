@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
 
 import androidx.fragment.app.Fragment;
 
@@ -23,6 +25,8 @@ public class RequestAcceptedFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
+    private Rider rider;
+    private Driver driver;
 
     /**
      * Instantiates a new RequestAcceptedFragment.
@@ -30,9 +34,11 @@ public class RequestAcceptedFragment extends Fragment {
      * @param request the user's current request
      * @param role    the user's role
      */
-    public RequestAcceptedFragment(RideRequest request, String role) {
+    public RequestAcceptedFragment(RideRequest request, String role, Rider rider, Driver driver) {
         this.rideRequest = request;
         this.role = role;
+        this.rider = rider;
+        this.driver = driver;
     }
 
     @Override
@@ -46,14 +52,14 @@ public class RequestAcceptedFragment extends Fragment {
         TextView pickupLocationTextView = view.findViewById(R.id.pickup_location);
         TextView dropoffLocationTextView = view.findViewById(R.id.dropoff_location);
         TextView fareTextView = view.findViewById(R.id.ride_fare);
-        TextView name = view.findViewById(R.id.rider_main_driver_name);
-        TextView phone = view.findViewById(R.id.rider_main_driver_phone);
-        TextView email = view.findViewById(R.id.rider_main_driver_email);
+        TextView nameTextView = view.findViewById(R.id.rider_main_driver_name);
+        TextView phoneTextView = view.findViewById(R.id.rider_main_driver_phone);
+        TextView emailTextView = view.findViewById(R.id.rider_main_driver_email);
         Button button = view.findViewById(R.id.request_accepted_button);
 
         // Set view elements
-//        pickupLocationTextView.setText(rideRequest.getStart().getName());
-//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        pickupLocationTextView.setText(rideRequest.getStartLocation().getName());
+        dropoffLocationTextView.setText(rideRequest.getEndLocation().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Change UI based on role
@@ -64,9 +70,9 @@ public class RequestAcceptedFragment extends Fragment {
                 button.setText("Cancel");
 
                 // Set values of info box
-//                name.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
-//                phone.setText(rideRequest.getDriver().getPhone());
-//                email.setText(rideRequest.getDriver().getEmail());
+                nameTextView.setText(driver.getUsername());
+                phoneTextView.setText(driver.getPhone());
+                emailTextView.setText(driver.getEmail());
 
                 button.setOnClickListener(new View.OnClickListener()
                 {
@@ -76,6 +82,9 @@ public class RequestAcceptedFragment extends Fragment {
                         // TODO: If rider, remove driver from request and set status to PENDING
                     }
                 });
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, driver));
                 break;
 
             case "Driver": // Rider Picked Up button
@@ -83,9 +92,9 @@ public class RequestAcceptedFragment extends Fragment {
                 button.setText("Rider picked up");
 
                 // Set values of info box
-//                name.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
-//                phone.setText(rideRequest.getRider().getPhone());
-//                email.setText(rideRequest.getRider().getEmail());
+                nameTextView.setText(rider.getUsername());
+                phoneTextView.setText(rider.getPhone());
+                emailTextView.setText(rider.getEmail());
 
                 button.setOnClickListener(new View.OnClickListener()
                 {
@@ -95,11 +104,11 @@ public class RequestAcceptedFragment extends Fragment {
                         // TODO: If driver, set request status to IN_PROGRESS
                     }
                 });
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rider));
                 break;
         }
-
-        // Bring up profile when name is clicked
-        name.setOnClickListener(new NameOnClickListener(role));
 
         return view;
     }

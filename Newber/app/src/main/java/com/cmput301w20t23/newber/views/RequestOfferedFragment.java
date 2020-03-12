@@ -9,7 +9,10 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
+import com.cmput301w20t23.newber.models.User;
 
 import androidx.fragment.app.Fragment;
 
@@ -22,16 +25,22 @@ public class RequestOfferedFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
+    private Rider rider;
+    private Driver driver;
 
     /**
      * Instantiates a new RequestOfferedFragment.
      *
      * @param request the current request
      * @param role    the user's role
+     * @param rider   the rider attached to current request
+     * @param driver  the driver attached to the current request
      */
-    public RequestOfferedFragment(RideRequest request, String role) {
+    public RequestOfferedFragment(RideRequest request, String role, Rider rider, Driver driver) {
         this.rideRequest = request;
         this.role = role;
+        this.rider = rider;
+        this.driver = driver;
     }
 
     @Override
@@ -52,16 +61,16 @@ public class RequestOfferedFragment extends Fragment {
         Button declineOfferButton = view.findViewById(R.id.rider_decline_offer_button);
 
         // Set view elements
-//        pickupLocationTextView.setText(rideRequest.getStart().getName());
-//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        pickupLocationTextView.setText(rideRequest.getStartLocation().getName());
+        dropoffLocationTextView.setText(rideRequest.getEndLocation().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         switch (role) {
             case "Rider":
                 // Set values of info box
-//                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
-//                phoneTextView.setText(rideRequest.getDriver().getPhone());
-//                emailTextView.setText(rideRequest.getDriver().getEmail());
+                nameTextView.setText(driver.getUsername());
+                phoneTextView.setText(driver.getPhone());
+                emailTextView.setText(driver.getEmail());
 
                 // Rider can click Accept or Decline to the driver's offer
                 acceptOfferButton.setOnClickListener(new View.OnClickListener()
@@ -70,6 +79,7 @@ public class RequestOfferedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: Leave driver attached to request on firebase and set request status to ACCEPTED
+
                     }
                 });
 
@@ -81,22 +91,25 @@ public class RequestOfferedFragment extends Fragment {
                         // TODO: Request status returns to PENDING and remove driver from request on Firebase
                     }
                 });
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, driver));
                 break;
 
             case "Driver":
                 // Set values of info box
-//                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
-//                phoneTextView.setText(rideRequest.getRider().getPhone());
-//                emailTextView.setText(rideRequest.getRider().getEmail());
+                nameTextView.setText(rider.getUsername());
+                phoneTextView.setText(rider.getPhone());
+                emailTextView.setText(rider.getEmail());
 
                 // Show decline/accept offer buttons only for Riders
                 acceptOfferButton.setVisibility(View.INVISIBLE);
                 declineOfferButton.setVisibility(View.INVISIBLE);
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rider));
                 break;
         }
-
-        // Bring up profile when name is clicked
-        nameTextView.setOnClickListener(new NameOnClickListener(role));
 
         return view;
     }
