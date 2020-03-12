@@ -62,7 +62,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         mapFragment.getMapAsync(this);
 
         setUpAutoCompleteFragments();
-        rideController = new RideController(this);
+        rideController = new RideController();
     }
 
     /**
