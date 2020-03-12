@@ -9,6 +9,8 @@ public class Rating {
     private int upvotes;
     private int downvotes;
 
+    public Rating() { }
+
     /**
      * Instantiates a new Rating.
      *

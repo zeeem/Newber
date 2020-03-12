@@ -9,7 +9,11 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
 
 import androidx.fragment.app.Fragment;
 
@@ -22,16 +26,27 @@ public class RequestInProgressFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
+    private Rider rider;
+    private Driver driver;
+
+    /**
+     * Instantiate RideRequest controller
+     */
+    private RideController rideController = new RideController();
 
     /**
      * Instantiates a new RequestInProgressFragment.
      *
      * @param request the current request
      * @param role    the user's role
+     * @param rider   the rider attached to the request
+     * @param driver  the driver attached to the request
      */
-    public RequestInProgressFragment(RideRequest request, String role) {
+    public RequestInProgressFragment(RideRequest request, String role, Rider rider, Driver driver) {
         this.rideRequest = request;
         this.role = role;
+        this.rider = rider;
+        this.driver = driver;
     }
 
     @Override
@@ -51,27 +66,30 @@ public class RequestInProgressFragment extends Fragment {
         Button completeButton = view.findViewById(R.id.driver_complete_ride_button);
 
         // Set view elements
-//        pickupLocationTextView.setText(rideRequest.getStart().getName());
-//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        pickupLocationTextView.setText(rideRequest.getStartLocation().getName());
+        dropoffLocationTextView.setText(rideRequest.getEndLocation().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         switch (role)
         {
             case "Rider":
                 // Set values of info box
-//                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
-//                phoneTextView.setText(rideRequest.getDriver().getPhone());
-//                emailTextView.setText(rideRequest.getDriver().getEmail());
+                nameTextView.setText(driver.getUsername());
+                phoneTextView.setText(driver.getPhone());
+                emailTextView.setText(driver.getEmail());
 
                 // Complete ride button only visible by driver; rider hides it
                 completeButton.setVisibility(View.INVISIBLE);
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, driver));
                 break;
 
             case "Driver":
                 // Set values of info box
-//                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
-//                phoneTextView.setText(rideRequest.getRider().getPhone());
-//                emailTextView.setText(rideRequest.getRider().getEmail());
+                nameTextView.setText(rider.getUsername());
+                phoneTextView.setText(rider.getPhone());
+                emailTextView.setText(rider.getEmail());
 
                 completeButton.setOnClickListener(new View.OnClickListener()
                 {
@@ -79,13 +97,17 @@ public class RequestInProgressFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: Set request status to COMPLETED and move Driver to PAYMENT screen
+                        rideRequest.setStatus(RequestStatus.COMPLETED);
+//                        rideController.updateRideRequest(rideRequest);
+
+                        // TODO: Start DriverPaymentActivity
                     }
                 });
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rider));
                 break;
         }
-
-        // Bring up profile when name is clicked
-        nameTextView.setOnClickListener(new NameOnClickListener(role));
 
         return view;
     }

@@ -125,6 +125,25 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * Sets email.
+     *
+     * @return the user ID
+     */
+    public String getUid() {
+        return this.uId;
+    }
+
+
+    /**
+     * Sets email.
+     *
+     * @param uId the user ID
+     */
+    public void setUid(String uId) {
+        this.uId = uId;
+    }
+
     public String getCurrentRequestId() { return this.currRequestId; }
 
     public void setCurrentRequestId(String currRequestId) { this.currRequestId = currRequestId; }

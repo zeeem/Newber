@@ -14,9 +14,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.Location;
+import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
+import com.cmput301w20t23.newber.models.User;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private RideRequest currRequest; // To be updated when querying db
 
-    private String role, currentRequestId;
+    private String firstName, lastName, username, phone, email, uId, currentRequestId, role;
+
+    private Rider rider;
+    private Driver driver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +62,39 @@ public class MainActivity extends AppCompatActivity {
                 .child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                role = dataSnapshot.child("role").getValue(String.class);
+                firstName = dataSnapshot.child("firstName").getValue(String.class);
+                lastName = dataSnapshot.child("lastName").getValue(String.class);
+                username = dataSnapshot.child("username").getValue(String.class);
+                phone = dataSnapshot.child("phone").getValue(String.class);
+                email = dataSnapshot.child("email").getValue(String.class);
+                uId = mAuth.getCurrentUser().getUid();
                 currentRequestId = dataSnapshot.child("currentRequestId").getValue(String.class);
+                role = dataSnapshot.child("role").getValue(String.class);
                 System.out.println("changed");
 
+                switch (role) {
+                    case "Rider":
+                        rider = new Rider(firstName, lastName, username, phone, email, uId, currentRequestId);
+                        break;
+
+                    case "Driver":
+                        database.getReference("drivers").child(uId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Rating rating = dataSnapshot.getValue(Rating.class);
+                                driver = new Driver(firstName, lastName, username, phone, email, uId, currentRequestId, rating);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        break;
+                }
+
                 // Use User.currRequestId to get RideRequest object from requests table
-                if (!currentRequestId.isEmpty()) {
+                if (currentRequestId != null && !currentRequestId.isEmpty()) {
                     System.out.println("currReqId not null");
 
                     database.getReference("rideRequests")
@@ -95,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
         Fragment riderFragment = null;
         TextView statusBanner = findViewById(R.id.main_status_banner);
 
+        System.out.println("the role is: " + role);
+
         if (currRequest == null) {
             // if current user has no request attached, use "no current request" fragment
             statusBanner.setText("No Request");
@@ -106,27 +142,27 @@ public class MainActivity extends AppCompatActivity {
                 case PENDING:
                     statusBanner.setText("Requested");
                     statusBanner.setBackgroundColor(Color.RED);
-                    riderFragment = new RequestPendingFragment(currRequest);
+                    riderFragment = new RequestPendingFragment(currRequest, rider);
                     break;
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
-                    riderFragment = new RequestOfferedFragment(currRequest, role);
+                    riderFragment = new RequestOfferedFragment(currRequest, role, rider, driver);
                     break;
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
                     statusBanner.setBackgroundColor(Color.GREEN);
-                    riderFragment = new RequestAcceptedFragment(currRequest, role);
+                    riderFragment = new RequestAcceptedFragment(currRequest, role, rider, driver);
                     break;
                 case IN_PROGRESS:
                     statusBanner.setText("In Progress");
                     statusBanner.setBackgroundColor(Color.YELLOW);
-                    riderFragment = new RequestInProgressFragment(currRequest, role);
+                    riderFragment = new RequestInProgressFragment(currRequest, role, rider, driver);
                     break;
                 case COMPLETED:
                     statusBanner.setText("Completed");
                     statusBanner.setBackgroundColor(Color.CYAN);
-                    riderFragment = new RequestCompletedFragment(currRequest);
+                    riderFragment = new RequestCompletedFragment(currRequest, driver);
             }
         }
 

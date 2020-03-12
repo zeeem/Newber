@@ -241,4 +241,19 @@ public class UserController {
                 });
         ref.child("phone").setValue(phone);
     }
+
+    /**
+     * Updates user entry with contents of the user
+     * @param user user model
+     */
+    public void updateUserInfo(User user) {
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(user.getUid())
+                .setValue(user);
+
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(user.getUid())
+                .child("currentRequestId")
+                .setValue(user.getCurrentRequestId());
+    }
 }

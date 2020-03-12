@@ -23,13 +23,14 @@ public class RideRequest {
     /**
      * Instantiates a new Ride request.
      *
+     * @param requestId     the unique request id
      * @param startPlace    the starting location
      * @param endPlace      the end location
      * @param riderUid      the rider involved
      * @param cost          the cost of the ride
      */
-    public RideRequest(Place startPlace, Place endPlace, String riderUid, double cost) {
-        this.requestId = UUID.randomUUID().toString();
+    public RideRequest(String requestId, Place startPlace, Place endPlace, String riderUid, double cost) {
+        this.requestId = requestId;
         this.startLocation = new Location(startPlace);
         this.endLocation = new Location(endPlace);
         this.status = RequestStatus.PENDING;

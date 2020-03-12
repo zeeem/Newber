@@ -1,6 +1,5 @@
 package com.cmput301w20t23.newber.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,10 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.RideRequest;
-import com.cmput301w20t23.newber.models.Location;
-import com.google.firebase.database.FirebaseDatabase;
+import com.cmput301w20t23.newber.models.Rider;
 
 /**
  * The Android Fragment that is shown when the user has a pending current ride request.
@@ -22,14 +22,22 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RequestPendingFragment extends Fragment {
 
     private RideRequest rideRequest;
+    private Rider rider;
+
+    /**
+     * Instantiate User and RideRequest controllers
+     */
+    private RideController rideController = new RideController();
+    private UserController userController = new UserController(this.getContext());
 
     /**
      * Instantiates a new RequestPendingFragment.
      *
      * @param request the current request
      */
-    public RequestPendingFragment(RideRequest request) {
-        rideRequest = request;
+    public RequestPendingFragment(RideRequest request, Rider rider) {
+        this.rideRequest = request;
+        this.rider = rider;
     }
 
     @Override
@@ -55,14 +63,12 @@ public class RequestPendingFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // Remove request from firebase requests table
-                FirebaseDatabase.getInstance().getReference("rideRequests")
-                        .child(rideRequest.getRequestId()).removeValue();
+                // Remove ride request entry from firebase
+                rideController.removeRideRequest(rideRequest);
 
                 // Remove current request ID from firebase user entry
-                FirebaseDatabase.getInstance().getReference("users")
-                        .child(rideRequest.getRiderUid())
-                        .child("currentRequestId").removeValue();
+                rider.setCurrentRequestId("");
+                userController.updateUserInfo(rider);
             }
         });
         return view;
