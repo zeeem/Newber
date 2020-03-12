@@ -21,9 +21,7 @@ public class RideRequest implements Serializable {
     private String riderUid;
     private double cost;
 
-    public RideRequest() {
-
-    }
+    public RideRequest() { }
 
     /**
      * Instantiates a new Ride request.

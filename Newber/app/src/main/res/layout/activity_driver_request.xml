@@ -38,7 +38,8 @@
             android:text="MAP"
             android:layout_weight="1"
             android:textColor="@color/colorWhite"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary"
+            android:id="@+id/driver_map_button"/>
     </LinearLayout>
 
     <fragment

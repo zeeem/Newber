@@ -8,15 +8,19 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.RideController;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,8 +42,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.SphericalUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 public class DriverRequestActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -54,8 +62,9 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
     private ArrayAdapter<RideRequest> requestListAdapter;
     private ListView requestListView;
 
-    private Place startPlace;
     private Marker startMarker;
+
+    private Geocoder geocoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +77,7 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         setUpAutoCompleteFragments();
+        setUpMapButton();
 
         requestListView = findViewById(R.id.request_list);
         requestListAdapter = new ArrayAdapter<>(this, R.layout.request_list_content);
@@ -113,16 +123,55 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
                 if (startMarker != null) {
                     startMarker.remove();
                 }
+
                 startMarker = googleMap.addMarker(new MarkerOptions().position(place.getLatLng()));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 12.0f));
-                startPlace = place;
 
-                queryOpenRequests(startPlace);
+                queryOpenRequests(place.getLatLng());
             }
 
             @Override
             public void onError(@NonNull Status status) {
                 System.out.println("An error occurred: " + status);
+            }
+        });
+    }
+
+    public String getNameFromLatLng(LatLng latLng) {
+        List<Address> addresses;
+
+        if (this.geocoder == null)
+            this.geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            Address address = addresses.get(0);
+
+            return address.getAddressLine(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public void setUpMapButton() {
+        Button driverMapButton = findViewById(R.id.driver_map_button);
+
+        driverMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DriverRequestActivity.this.googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                    @Override
+                    public void onMapLongClick(LatLng latLng) {
+                        if (startMarker != null) {
+                            startMarker.remove();
+                        }
+
+                        startMarker = googleMap.addMarker(new MarkerOptions().position(latLng));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+                        queryOpenRequests(latLng);
+                    }
+                });
             }
         });
     }
@@ -191,12 +240,12 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Edmonton, 10.0f));
     }
 
-    private void queryOpenRequests(Place startPlace) {
+    private void queryOpenRequests(final LatLng latLng) {
         double distanceCenterToCorner = 5000 * Math.sqrt(2.0);
         LatLng southwestCorner =
-                SphericalUtil.computeOffset(startPlace.getLatLng(), distanceCenterToCorner, 225.0);
+                SphericalUtil.computeOffset(latLng, distanceCenterToCorner, 225.0);
         LatLng northeastCorner =
-                SphericalUtil.computeOffset(startPlace.getLatLng(), distanceCenterToCorner, 45.0);
+                SphericalUtil.computeOffset(latLng, distanceCenterToCorner, 45.0);
         final LatLngBounds searchBounds = new LatLngBounds(southwestCorner, northeastCorner);
 
         // TODO: Sort by distance
@@ -205,14 +254,31 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         ArrayList<RideRequest> openRequests = new ArrayList<RideRequest>();
-                        for (DataSnapshot requestSnapshot:dataSnapshot.getChildren()) {
+                        for (DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
                             RideRequest request = requestSnapshot.getValue(RideRequest.class);
                             LatLng startLatLng = new LatLng(request.getStartLocation().getLatitude(),
                                     request.getStartLocation().getLongitude());
+
                             if (searchBounds.contains(startLatLng)) {
                                 openRequests.add(request);
                             }
                         }
+
+                        Collections.sort(openRequests, new Comparator<RideRequest>() {
+                            @Override
+                            public int compare(RideRequest o1, RideRequest o2) {
+                                double val1 =
+                                        (latLng.latitude - o1.getStartLocation().getLatitude()) +
+                                        (latLng.longitude - o1.getStartLocation().getLongitude());
+
+                                double val2 =
+                                        (latLng.latitude - o2.getStartLocation().getLatitude()) +
+                                        (latLng.longitude - o2.getStartLocation().getLongitude());
+
+                                return (int) (val1 - val2);
+                            }
+                        });
+
                         updateRequestList(openRequests);
                     }
 
