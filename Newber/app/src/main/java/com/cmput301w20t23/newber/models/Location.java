@@ -54,7 +54,9 @@ public class Location implements Serializable {
 
     @NonNull
     @Override
-    public String toString() {
-        return this.name + ": " + this.latitude + ", " + this.longitude;
+    public String toString() { return this.name; }
+
+    public LatLng toLatLng() {
+        return new LatLng(latitude, longitude);
     }
 }
