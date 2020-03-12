@@ -15,11 +15,15 @@ public class RideController {
     }
     
     public void createRideRequest(final Place startPlace, final Place endPlace, double cost) {
+        String requestId = database.getReference("rideRequests").push().getKey();
         String riderUid = this.mAuth.getCurrentUser().getUid();
-        RideRequest rideRequest = new RideRequest(startPlace, endPlace, riderUid, cost);
+        RideRequest rideRequest = new RideRequest(requestId, startPlace, endPlace, riderUid, cost);
         database.getReference("rideRequests")
-                .child(rideRequest.getRequestId())
+                .child(requestId)
                 .setValue(rideRequest);
-        database.getReference("users").child(riderUid).child("currentRequestId").setValue(rideRequest.getRequestId());
+        database.getReference("users")
+                .child(riderUid)
+                .child("currentRequestId")
+                .setValue(requestId);
     }
 }

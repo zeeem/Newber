@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RideRequest;
 
 /**
@@ -20,14 +21,16 @@ import com.cmput301w20t23.newber.models.RideRequest;
 public class RequestCompletedFragment extends Fragment {
 
     private RideRequest rideRequest;
+    private Driver driver;
 
     /**
      * Instantiates a new RequestCompletedFragment.
      *
      * @param request the current request
      */
-    public RequestCompletedFragment(RideRequest request) {
-        rideRequest = request;
+    public RequestCompletedFragment(RideRequest request, Driver driver) {
+        this.rideRequest = request;
+        this.driver = driver;
     }
 
     @Override
@@ -46,14 +49,14 @@ public class RequestCompletedFragment extends Fragment {
         Button completeRequestButton = view.findViewById(R.id.rider_complete_ride_button);
 
         // Set view elements
-//        pickupLocationTextView.setText(rideRequest.getStart().getName());
-//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        pickupLocationTextView.setText(rideRequest.getStartLocation().getName());
+        dropoffLocationTextView.setText(rideRequest.getEndLocation().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Set driver box information
-//        nameTextView.setText(rideRequest.getDriver().getFirstName() + rideRequest.getDriver().getLastName());
-//        phoneTextView.setText(rideRequest.getDriver().getPhone());
-//        emailTextView.setText(rideRequest.getDriver().getEmail());
+        nameTextView.setText(driver.getUsername());
+        phoneTextView.setText(driver.getPhone());
+        emailTextView.setText(driver.getEmail());
 
         completeRequestButton.setOnClickListener(new View.OnClickListener()
         {
