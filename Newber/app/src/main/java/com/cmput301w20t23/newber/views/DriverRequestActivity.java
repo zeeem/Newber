@@ -50,6 +50,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+/**
+ * The Android Activity that handles General Driver Request Activity.
+ *
+ * @author Ayushi Patel, Ibrahim Aly
+ */
 public class DriverRequestActivity extends AppCompatActivity implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -59,11 +64,14 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
     private View mainLayout;
     private static final int PERMISSION_REQUEST_LOCATION = 0;
 
+    // List View and Adapter for all the Requests coming in
     private ArrayAdapter<RideRequest> requestListAdapter;
     private ListView requestListView;
 
+    // Marker to place when driver selects pick-up location
     private Marker startMarker;
 
+    // For translating Latitude/Longitude to human-readable addresses
     private Geocoder geocoder;
 
     @Override
@@ -76,13 +84,16 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
 
         mainLayout = findViewById(R.id.main_layout);
 
+        // Start the Google Map Fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Set up the auto-complete and the map-buttons fragments
         setUpAutoCompleteFragments();
         setUpMapButton();
 
+        // Set up the ListView and Adapter to handle receiving requests, and set the Click Listener
         requestListView = findViewById(R.id.request_list);
         requestListAdapter = new ArrayAdapter<>(this, R.layout.request_list_content);
         requestListView.setAdapter(requestListAdapter);
@@ -98,6 +109,12 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
+    /**
+     * Handling Accepting a Request from DriverAcceptRequestActivity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -143,6 +160,11 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
+    /**
+     * Function to get human-readable address from a latitude and longitude
+     * @param latLng the Latitude/Longitude object
+     * @return Returns an address in a String type
+     */
     public String getNameFromLatLng(LatLng latLng) {
         List<Address> addresses;
 
@@ -160,6 +182,10 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    /**
+     * Sets up the Pick-Up Location Map Button to be clickable, and allow the user to select
+     * a location on the map
+     */
     public void setUpMapButton() {
         Button driverMapButton = findViewById(R.id.driver_map_button);
 
@@ -182,6 +208,12 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
+    /**
+     * After making a permission request, get the result and set myLocationEnabled if successful
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_LOCATION) {
@@ -200,6 +232,9 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    /**
+     * Request Location (MyLocationEnabled) Permissions
+     */
     private void requestLocationPermission() {
         // Permission has not been granted and must be requested.
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -222,6 +257,9 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    /**
+     * Sets up the Google Maps UI Settings such as zooming in and out.
+     */
     private void setUpUiSettings() {
         UiSettings uiSettings = this.googleMap.getUiSettings();
         uiSettings.setAllGesturesEnabled(true);
@@ -241,12 +279,17 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
             requestLocationPermission();
         }
 
-        // Add a marker in Edmonton and move the camera
+        // Move the camera to Edmonton
         LatLng Edmonton = new LatLng(53.5461215,-113.4939365);
         this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Edmonton, 10.0f));
     }
 
+    /**
+     * Finds available requests with a 5 Km distance radius from the current pick-up location
+     * @param latLng
+     */
     private void queryOpenRequests(final LatLng latLng) {
+        // Set up search bounds
         double distanceCenterToCorner = 5000 * Math.sqrt(2.0);
         LatLng southwestCorner =
                 SphericalUtil.computeOffset(latLng, distanceCenterToCorner, 225.0);
@@ -254,7 +297,9 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
                 SphericalUtil.computeOffset(latLng, distanceCenterToCorner, 45.0);
         final LatLngBounds searchBounds = new LatLngBounds(southwestCorner, northeastCorner);
 
-        // TODO: Sort by distance
+        // TODO: Make Sorting more efficient
+        // Call the Databasee to find all available requests within a 5km radius, and sort (very simply)
+        // them by distance
         FirebaseDatabase.getInstance().getReference("rideRequests").orderByChild("driver").equalTo(null)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -296,6 +341,10 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
                 });
     }
 
+    /**
+     * Update the ListView and Adapter to display the open requests available
+     * @param openRequests A List of all open requests available to choose from
+     */
     private void updateRequestList(ArrayList<RideRequest> openRequests) {
         System.out.println("in updateRequestList");
         for (RideRequest req : openRequests) {

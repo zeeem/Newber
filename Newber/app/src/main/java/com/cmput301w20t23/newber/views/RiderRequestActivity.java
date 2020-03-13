@@ -47,19 +47,31 @@ import java.util.Locale;
 public class RiderRequestActivity extends AppCompatActivity implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
+    // Google Map Fragment
     private GoogleMap googleMap;
     private View mainLayout;
+
+    //For requesting MyLocation Permission
     private static final int PERMISSION_REQUEST_LOCATION = 0;
 
+    //Start and End Locations
     private Location startLocation;
     private Location endLocation;
+
+    //A geocoder to successfully translate Latitude Longitude to human-readable addresses
     private Geocoder geocoder;
 
+    //Markers to set on the start and end locations
     private Marker startMarker;
     private Marker endMarker;
 
     private RideController rideController;
 
+    /**
+     * Function to get human-readable address from a latitude and longitude
+     * @param latLng the Latitude/Longitude object
+     * @return Returns an address in a String type
+     */
     public String getNameFromLatLng(LatLng latLng) {
         List<Address> addresses;
 
@@ -77,6 +89,10 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
+    /**
+     * Sets the start marker to the selected location
+     * @param latLng Latitude/Longitude object selected
+     */
     public void setStartMarker(LatLng latLng) {
         if (startMarker != null) {
             startMarker.remove();
@@ -86,6 +102,10 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
     }
 
+    /**
+     * Sets the end marker to the selected location
+     * @param latLng Latitude/Longitude object selected
+     */
     public void setEndMarker(LatLng latLng) {
         if (endMarker != null) {
             endMarker.remove();
@@ -96,7 +116,8 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
     }
 
     /**
-     * Sets up auto complete fragments.
+     * Sets up the 2 auto complete fragments; one for selecting start location and one for selecting
+     * end location.
      */
     public void setUpAutoCompleteFragments() {
         final AutocompleteSupportFragment startAutocompleteSupportFragment =
@@ -162,6 +183,10 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         });
     }
 
+    /**
+     * Sets up the From and To Map Buttons to be clickable, and allow the user to select
+     * a from/to location on the map
+     */
     public void setUpMapButtons() {
         Button fromMapButton = findViewById(R.id.from_map_button);
         Button toMapButton = findViewById(R.id.to_map_button);
@@ -205,6 +230,9 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         });
     }
 
+    /**
+     * Sets up the Google Maps UI Settings such as zooming in and out.
+     */
     private void setUpUiSettings() {
         UiSettings uiSettings = this.googleMap.getUiSettings();
         uiSettings.setAllGesturesEnabled(true);
@@ -212,6 +240,12 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         uiSettings.setCompassEnabled(true);
     }
 
+    /**
+     * After making a permission request, get the result and set myLocationEnabled if successful
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_LOCATION) {
@@ -230,6 +264,9 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
+    /**
+     * Request Location (MyLocationEnabled) Permissions
+     */
     private void requestLocationPermission() {
         // Permission has not been granted and must be requested.
         if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -260,6 +297,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         this.googleMap = googleMap;
         setUpUiSettings();
 
+        //Check for permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             this.googleMap.setMyLocationEnabled(true);
@@ -267,7 +305,7 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
             requestLocationPermission();
         }
 
-        // Add a marker in Edmonton and move the camera
+        // Move the camera to Edmonton
         LatLng Edmonton = new LatLng(53.5461215,-113.4939365);
         this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Edmonton, 10.0f));
     }
@@ -278,23 +316,35 @@ public class RiderRequestActivity extends AppCompatActivity implements OnMapRead
         setContentView(R.layout.activity_rider_request);
         mainLayout = findViewById(R.id.main_layout);
 
+        // Start the Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Set up the AutoComplete Fragments
         setUpAutoCompleteFragments();
         rideController = new RideController();
 
+        // Initialize start and locations
         startLocation = new Location();
         endLocation = new Location();
 
+        // Set up the map buttons
         setUpMapButtons();
     }
 
+    /**
+     * Cancel Ride Request Function
+     * @param view
+     */
     public void cancelRiderRequest(View view) {
         finish();
     }
 
+    /**
+     * Handler Function when a Ride Request has been confirmed
+     * @param view
+     */
     public void confirmRiderRequest(View view) {
         if ((startLocation == null) || (endLocation == null)) {
             Toast.makeText(this, "Please select endpoints", Toast.LENGTH_SHORT).show();

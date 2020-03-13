@@ -30,6 +30,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * The Android Activity that handles Driver Accepting Request.
+ *
+ * @author Ayushi Patel, Ibrahim Aly
+ */
 public class DriverAcceptRequestActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap googleMap;
@@ -52,14 +57,18 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
         setUpTextViews();
     }
 
+    /**
+     * Function that sets the Text Views to the Rider that this (driver) accepted the ride request from
+     */
     public void setUpTextViews() {
+        // Get the pick up and drop off locations
         TextView pickUp = findViewById(R.id.driver_accept_pick_up);
         pickUp.setText(request.getStartLocation().toString());
 
         TextView dropOff = findViewById(R.id.driver_accept_drop_off);
         dropOff.setText(request.getEndLocation().toString());
 
-
+        // Get the rider's name and set it in the text view
         final TextView riderName = findViewById(R.id.driver_accept_rider_name);
         FirebaseDatabase.getInstance()
                 .getReference("users")
@@ -77,6 +86,7 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
                     public void onCancelled(@NonNull DatabaseError databaseError) { }
                 });
 
+        // Set the fare
         TextView fare = findViewById(R.id.driver_accept_fare);
         fare.setText(String.format("$%s", request.getCost()));
     }
@@ -91,11 +101,19 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
         this.googleMap.addMarker(new MarkerOptions().position(request.getEndLocation().toLatLng()));
     }
 
+    /**
+     * Cancel Driver Accept Request Function
+     * @param view
+     */
     public void cancelRequest(View view) {
         setResult(Activity.RESULT_CANCELED, new Intent());
         finish();
     }
 
+    /**
+     * Handler Function when a Rider Request has been accepted by the Driver
+     * @param view
+     */
     public void acceptRequest(View view) {
         setResult(Activity.RESULT_OK, new Intent());
         request.setDriver(driver);
