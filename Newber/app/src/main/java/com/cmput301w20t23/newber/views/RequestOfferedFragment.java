@@ -101,10 +101,10 @@ public class RequestOfferedFragment extends Fragment {
                     {
                         // TODO: Request status returns to PENDING and remove driver from request on Firebase
                         rideRequest.setStatus(RequestStatus.PENDING);
-                        rideRequest.setDriver(null);
-                        rideController.updateRideRequest(rideRequest);
                         rideRequest.getDriver().setCurrentRequestId("");
                         userController.updateUserCurrentRequestId(rideRequest.getDriver());
+                        rideRequest.setDriver(null);
+                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 

@@ -255,7 +255,7 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
         final LatLngBounds searchBounds = new LatLngBounds(southwestCorner, northeastCorner);
 
         // TODO: Sort by distance
-        FirebaseDatabase.getInstance().getReference("rideRequests").orderByChild("driverUid").equalTo("")
+        FirebaseDatabase.getInstance().getReference("rideRequests").orderByChild("driver").equalTo(null)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -266,6 +266,7 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
                                     request.getStartLocation().getLongitude());
 
                             if (searchBounds.contains(startLatLng)) {
+                                System.out.println(request.toString());
                                 openRequests.add(request);
                             }
                         }
@@ -296,6 +297,10 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
     }
 
     private void updateRequestList(ArrayList<RideRequest> openRequests) {
+        System.out.println("in updateRequestList");
+        for (RideRequest req : openRequests) {
+            System.out.println(req.toString());
+        }
         requestListAdapter.clear();
         requestListAdapter.addAll(openRequests);
         requestListAdapter.notifyDataSetChanged();

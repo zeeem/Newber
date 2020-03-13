@@ -141,9 +141,13 @@ public class MainActivity extends AppCompatActivity {
         else {
             switch (currRequest.getStatus()) {
                 case PENDING:
-                    statusBanner.setText("Requested");
-                    statusBanner.setBackgroundColor(Color.RED);
-                    riderFragment = new RequestPendingFragment(currRequest);
+                    if (role.matches("Rider")) {
+                        statusBanner.setText("Requested");
+                        statusBanner.setBackgroundColor(Color.RED);
+                        riderFragment = new RequestPendingFragment(currRequest);
+                    } else {
+                        riderFragment = new NoRequestFragment(role, user);
+                    }
                     break;
                 case OFFERED:
                     statusBanner.setText("Offered");
