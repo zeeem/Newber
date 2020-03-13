@@ -68,8 +68,6 @@ public class RiderTest {
                 && expected.getEndLocation() == result.getEndLocation()
                 && expected.getStatus() == result.getStatus()
                 && expected.getCost() == result.getCost());
-
-
     }
 }
 
