@@ -177,8 +177,8 @@ public class UserController {
      * @param phone the user's phone
      * @return a boolean indicating whether or not the contact info fields are valid.
      */
-    public boolean isContactInfoValid(String email, String phone) {
-        if (phone.trim().length() == 0 | email.trim().length() == 0) {
+    public boolean isContactInfoValid(String email, String phone, String password) {
+        if (phone.trim().length() == 0 | email.trim().length() == 0 | password.trim().length() == 0) {
             Toast.makeText(context, "Please enter all fields", Toast.LENGTH_SHORT).show();
             return false;
         }
