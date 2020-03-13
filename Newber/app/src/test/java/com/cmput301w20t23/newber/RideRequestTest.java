@@ -1,8 +1,11 @@
 package com.cmput301w20t23.newber;
 
+import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.Location;
+import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +18,8 @@ public class RideRequestTest {
     private RideRequest testRequest;
     private Location testStart;
     private Location testEnd;
+    private Rider testRider;
+    private Driver testDriver;
 
     @Before
     public void setUp() {
@@ -28,11 +33,29 @@ public class RideRequestTest {
         testEnd.setLatitude(55.555);
         testEnd.setLongitude(44.444);
 
-        testRequest = new RideRequest(testStart, testEnd, "12345", 10.0);
+        testRider = new Rider("First",
+                "Last",
+                "username",
+                "7801234567",
+                "rider@example.com",
+                "12345",
+                "98765");
+
+        testDriver = new Driver("First",
+                "Last",
+                "username",
+                "7801234567",
+                "rider@example.com",
+                "12345",
+                "98765",
+                new Rating(1, 1));
+
+        testRequest = new RideRequest("11111", testStart, testEnd, RequestStatus.PENDING, testRider, testDriver, 10.0);
     }
 
     @Test
     public void testSetAndGetRequestId() {
+        assertEquals("11111", testRequest.getRequestId());
         String testUUID = UUID.randomUUID().toString();
         testRequest.setRequestId(testUUID);
         assertEquals(testUUID, testRequest.getRequestId());
@@ -80,17 +103,13 @@ public class RideRequestTest {
     }
 
     @Test
-    public void testSetAndGetDriverUid() {
-        assertEquals("", testRequest.getDriverUid());
-        testRequest.setDriverUid("98765");
-        assertEquals("98765", testRequest.getDriverUid());
+    public void testSetAndGetDriver() {
+        assertTrue(testDriver.equals(testRequest.getDriver()));
     }
 
     @Test
-    public void testSetAndGetRiderUid() {
-        assertEquals("12345", testRequest.getRiderUid());
-        testRequest.setRiderUid("54321");
-        assertEquals("54321", testRequest.getRiderUid());
+    public void testSetAndGetRider() {
+        assertTrue(testRider.equals(testRequest.getRider()));
     }
 
     @Test

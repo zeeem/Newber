@@ -5,4 +5,9 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorAccent">#000000</color>
+    <color name="bannerRed">#EB5757</color>
+    <color name="bannerOrange">#F2994A</color>
+    <color name="bannerGreen">#65CF97</color>
+    <color name="bannerYellow">#F2C94C</color>
+    <color name="bannerBlue">#56CCF2</color>
 </resources>
