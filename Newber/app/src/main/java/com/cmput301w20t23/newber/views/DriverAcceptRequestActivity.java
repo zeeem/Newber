@@ -43,6 +43,8 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
         setContentView(R.layout.activity_driver_accept_request);
         request = (RideRequest) getIntent().getSerializableExtra("request");
         driver = (Driver) getIntent().getSerializableExtra("driver");
+
+        System.out.println("DriverAcceptRequestActivity " + driver.getUsername());
         rideController = new RideController();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -63,7 +65,7 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
         final TextView riderName = findViewById(R.id.driver_accept_rider_name);
         FirebaseDatabase.getInstance()
                 .getReference("users")
-                .child(request.getRiderUid())
+                .child(request.getRider().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -61,12 +61,12 @@ public class RequestPendingFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // Remove ride request entry from firebase
-                rideController.removeRideRequest(rideRequest);
-
                 // Remove current request ID from firebase user entry
                 rideRequest.getRider().setCurrentRequestId("");
                 userController.updateUserCurrentRequestId(rideRequest.getRider());
+
+                // Remove ride request entry from firebase
+                rideController.removeRideRequest(rideRequest);
             }
         });
         return view;

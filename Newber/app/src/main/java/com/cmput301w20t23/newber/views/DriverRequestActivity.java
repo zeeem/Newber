@@ -91,8 +91,8 @@ public class DriverRequestActivity extends AppCompatActivity implements OnMapRea
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getBaseContext(), DriverAcceptRequestActivity.class);
                 intent.putExtra("request", requestListAdapter.getItem(i));
-                System.out.println("From driver request activity: " + driver.getUsername());
                 intent.putExtra("driver", driver);
+                System.out.println("From driver request activity: " + driver.getUsername());
                 startActivityForResult(intent, DRIVER_ACCEPT_REQUEST);
             }
         });
