@@ -16,6 +16,7 @@ import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -86,7 +87,7 @@ public class RequestInProgressFragment extends Fragment {
                 phoneTextView.setText(rideRequest.getRider().getPhone());
                 emailTextView.setText(rideRequest.getRider().getEmail());
 
-                completeButton.setBackgroundColor(Color.CYAN);
+                completeButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.bannerBlue));
                 completeButton.setText("Complete");
 
                 completeButton.setOnClickListener(new View.OnClickListener()
