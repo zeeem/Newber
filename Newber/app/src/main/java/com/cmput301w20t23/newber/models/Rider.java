@@ -20,6 +20,7 @@ public class Rider extends User implements Serializable {
      * @param phone         the phone
      * @param email         the email
      * @param uId           the user id
+     * @param currentRequestId the current request id
      */
 
     public Rider(String firstName, String lastName, String username, String phone, String email,
