@@ -182,7 +182,7 @@ public class ProfileActivity extends AppCompatActivity {
                         String newPhone = phoneInput.getText().toString();
                         String password = passwordInput.getText().toString();
 
-                        if (userController.isContactInfoValid(newEmail, newPhone)) {
+                        if (userController.isContactInfoValid(newEmail, newPhone, password)) {
                             userController.saveContactInfo(ProfileActivity.this, newEmail, newPhone, password);
                             dialog.dismiss();
                         }
