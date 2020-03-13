@@ -15,18 +15,18 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.models.Driver;
-import com.cmput301w20t23.newber.models.Location;
 import com.cmput301w20t23.newber.models.Rating;
-import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
-import com.google.android.libraries.places.api.model.Place;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * The Android Activity that acts as the main user screen of the app.
@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String firstName, lastName, username, phone, email, uId, currentRequestId, role;
 
-    private Rider rider;
-    private Driver driver;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +73,16 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (role) {
                     case "Rider":
-                        rider = new Rider(firstName, lastName, username, phone, email, uId, currentRequestId);
+                        user = new Rider(firstName, lastName, username, phone, email, uId, currentRequestId);
                         break;
 
                     case "Driver":
+                        user = new Driver(firstName, lastName, username, phone, email, uId, currentRequestId, null);
                         database.getReference("drivers").child(uId).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Rating rating = dataSnapshot.getValue(Rating.class);
-                                driver = new Driver(firstName, lastName, username, phone, email, uId, currentRequestId, rating);
+                                // append rating
                             }
 
                             @Override
@@ -92,17 +92,17 @@ public class MainActivity extends AppCompatActivity {
                         });
                         break;
                 }
-
+                System.out.println(MainActivity.this.user.getEmail());
                 // Use User.currRequestId to get RideRequest object from requests table
                 if (currentRequestId != null && !currentRequestId.isEmpty()) {
                     System.out.println("currReqId not null");
-
                     database.getReference("rideRequests")
                             .child(currentRequestId).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 currRequest = dataSnapshot.getValue(RideRequest.class);
+//                                updateUsers();
                                 displayFragment();
                             }
                         }
@@ -130,45 +130,47 @@ public class MainActivity extends AppCompatActivity {
         TextView statusBanner = findViewById(R.id.main_status_banner);
 
         System.out.println("the role is: " + role);
+        System.out.println(user.toString());
 
         if (currRequest == null) {
             // if current user has no request attached, use "no current request" fragment
             statusBanner.setText("No Request");
             statusBanner.setBackgroundColor(Color.LTGRAY);
-            riderFragment = new NoRequestFragment(role);
+            riderFragment = new NoRequestFragment(role, user);
         }
         else {
             switch (currRequest.getStatus()) {
                 case PENDING:
                     statusBanner.setText("Requested");
                     statusBanner.setBackgroundColor(Color.RED);
-                    riderFragment = new RequestPendingFragment(currRequest, rider);
+                    riderFragment = new RequestPendingFragment(currRequest);
                     break;
                 case OFFERED:
                     statusBanner.setText("Offered");
                     statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
-                    riderFragment = new RequestOfferedFragment(currRequest, role, rider, driver);
+                    System.out.println(user);
+                    riderFragment = new RequestOfferedFragment(currRequest, role);
                     break;
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
                     statusBanner.setBackgroundColor(Color.GREEN);
-                    riderFragment = new RequestAcceptedFragment(currRequest, role, rider, driver);
+                    riderFragment = new RequestAcceptedFragment(currRequest, role);
                     break;
                 case IN_PROGRESS:
                     statusBanner.setText("In Progress");
                     statusBanner.setBackgroundColor(Color.YELLOW);
-                    riderFragment = new RequestInProgressFragment(currRequest, role, rider, driver);
+                    riderFragment = new RequestInProgressFragment(currRequest, role);
                     break;
                 case COMPLETED:
                     statusBanner.setText("Completed");
                     statusBanner.setBackgroundColor(Color.CYAN);
-                    riderFragment = new RequestCompletedFragment(currRequest, driver);
+                    riderFragment = new RequestCompletedFragment(currRequest);
             }
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.rider_request_details, riderFragment);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     @Override

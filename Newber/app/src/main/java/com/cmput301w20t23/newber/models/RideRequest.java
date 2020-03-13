@@ -17,8 +17,8 @@ public class RideRequest implements Serializable {
     private Location startLocation;
     private Location endLocation;
     private RequestStatus status;
-    private String driverUid;
-    private String riderUid;
+    private Driver driver;
+    private Rider rider;
     private double cost;
 
     public RideRequest() { }
@@ -28,26 +28,26 @@ public class RideRequest implements Serializable {
      *
      * @param startLocation    the starting location
      * @param endLocation      the end location
-     * @param riderUid      the rider involved
+     * @param rider      the rider involved
      * @param cost          the cost of the ride
      */
-    public RideRequest(Location startLocation, Location endLocation, String riderUid, double cost) {
+    public RideRequest(Location startLocation, Location endLocation, Rider rider, double cost) {
         this.requestId = UUID.randomUUID().toString();
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.status = RequestStatus.PENDING;
-        this.riderUid = riderUid;
-        this.driverUid = "";
+        this.rider = rider;
+        this.driver = null;
         this.cost = cost;
     }
 
-    public RideRequest(String requestId, Location startLocation, Location endLocation, RequestStatus status, String riderUid, String driverUid, double cost) {
+    public RideRequest(String requestId, Location startLocation, Location endLocation, RequestStatus status, Rider rider, Driver driver, double cost) {
         this.requestId = requestId;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.status = status;
-        this.riderUid = riderUid;
-        this.driverUid = driverUid;
+        this.rider = rider;
+        this.driver = driver;
         this.cost = cost;
     }
 
@@ -128,17 +128,17 @@ public class RideRequest implements Serializable {
      *
      * @return the driver involved
      */
-    public String getDriverUid() {
-        return driverUid;
+    public Driver getDriver() {
+        return driver;
     }
 
     /**
      * Sets driver.
      *
-     * @param driverUid the driver involved
+     * @param driver the driver involved
      */
-    public void setDriverUid(String driverUid) {
-        this.driverUid = driverUid;
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
     /**
@@ -146,17 +146,17 @@ public class RideRequest implements Serializable {
      *
      * @return the rider involved
      */
-    public String getRiderUid() {
-        return riderUid;
+    public Rider getRider() {
+        return rider;
     }
 
     /**
      * Sets rider.
      *
-     * @param riderUid the rider involved
+     * @param rider the rider involved
      */
-    public void setRiderUid(String riderUid) {
-        this.riderUid = riderUid;
+    public void setRider(Rider rider) {
+        this.rider = rider;
     }
 
     /**

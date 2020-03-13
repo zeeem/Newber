@@ -21,16 +21,14 @@ import com.cmput301w20t23.newber.models.RideRequest;
 public class RequestCompletedFragment extends Fragment {
 
     private RideRequest rideRequest;
-    private Driver driver;
 
     /**
      * Instantiates a new RequestCompletedFragment.
      *
      * @param request the current request
      */
-    public RequestCompletedFragment(RideRequest request, Driver driver) {
+    public RequestCompletedFragment(RideRequest request) {
         this.rideRequest = request;
-        this.driver = driver;
     }
 
     @Override
@@ -54,9 +52,9 @@ public class RequestCompletedFragment extends Fragment {
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         // Set driver box information
-        nameTextView.setText(driver.getUsername());
-        phoneTextView.setText(driver.getPhone());
-        emailTextView.setText(driver.getEmail());
+        nameTextView.setText(rideRequest.getDriver().getUsername());
+        phoneTextView.setText(rideRequest.getDriver().getPhone());
+        emailTextView.setText(rideRequest.getDriver().getEmail());
 
         completeRequestButton.setOnClickListener(new View.OnClickListener()
         {

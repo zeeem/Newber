@@ -10,11 +10,20 @@ import android.widget.TextView;
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
 import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.CountDownLatch;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -26,27 +35,22 @@ public class RequestOfferedFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
-    private Rider rider;
-    private Driver driver;
 
     /**
      * Instantiate RideRequest controller
      */
     private RideController rideController = new RideController();
+    private UserController userController = new UserController(this.getContext());
 
     /**
      * Instantiates a new RequestOfferedFragment.
      *
      * @param request the current request
      * @param role    the user's role
-     * @param rider   the rider attached to current request
-     * @param driver  the driver attached to the current request
      */
-    public RequestOfferedFragment(RideRequest request, String role, Rider rider, Driver driver) {
+    public RequestOfferedFragment(RideRequest request, String role) {
         this.rideRequest = request;
         this.role = role;
-        this.rider = rider;
-        this.driver = driver;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class RequestOfferedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // View for this fragment
-        View view = inflater.inflate(R.layout.pending_fragment, container, false);
+        View view = inflater.inflate(R.layout.offered_fragment, container, false);
 
         // Get view elements
         TextView pickupLocationTextView = view.findViewById(R.id.pickup_location);
@@ -74,9 +78,9 @@ public class RequestOfferedFragment extends Fragment {
         switch (role) {
             case "Rider":
                 // Set values of info box
-                nameTextView.setText(driver.getUsername());
-                phoneTextView.setText(driver.getPhone());
-                emailTextView.setText(driver.getEmail());
+                nameTextView.setText(rideRequest.getDriver().getUsername());
+                phoneTextView.setText(rideRequest.getDriver().getPhone());
+                emailTextView.setText(rideRequest.getDriver().getEmail());
 
                 // Rider can click Accept or Decline to the driver's offer
                 acceptOfferButton.setOnClickListener(new View.OnClickListener()
@@ -86,7 +90,7 @@ public class RequestOfferedFragment extends Fragment {
                     {
                         // TODO: Leave driver attached to request on firebase and set request status to ACCEPTED
                         rideRequest.setStatus(RequestStatus.ACCEPTED);
-//                        rideController.updateRideRequest(rideRequest);
+                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 
@@ -97,27 +101,29 @@ public class RequestOfferedFragment extends Fragment {
                     {
                         // TODO: Request status returns to PENDING and remove driver from request on Firebase
                         rideRequest.setStatus(RequestStatus.PENDING);
-                        rideRequest.setDriverUid("");
-//                        rideController.updateRideRequest(rideRequest);
+                        rideRequest.setDriver(null);
+                        rideController.updateRideRequest(rideRequest);
+                        rideRequest.getDriver().setCurrentRequestId("");
+                        userController.updateUserCurrentRequestId(rideRequest.getDriver());
                     }
                 });
 
                 // Bring up profile when name is clicked
-                nameTextView.setOnClickListener(new NameOnClickListener(role, driver));
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getDriver()));
                 break;
 
             case "Driver":
                 // Set values of info box
-                nameTextView.setText(rider.getUsername());
-                phoneTextView.setText(rider.getPhone());
-                emailTextView.setText(rider.getEmail());
+                nameTextView.setText(rideRequest.getRider().getUsername());
+                phoneTextView.setText(rideRequest.getRider().getPhone());
+                emailTextView.setText(rideRequest.getRider().getEmail());
 
                 // Show decline/accept offer buttons only for Riders
                 acceptOfferButton.setVisibility(View.INVISIBLE);
                 declineOfferButton.setVisibility(View.INVISIBLE);
 
                 // Bring up profile when name is clicked
-                nameTextView.setOnClickListener(new NameOnClickListener(role, rider));
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getRider()));
                 break;
         }
 
