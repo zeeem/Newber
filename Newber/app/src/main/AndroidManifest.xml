@@ -3,6 +3,7 @@
     package="com.cmput301w20t23.newber">
 
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -11,8 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.MainActivity"></activity>
-        <activity android:name=".views.LoginActivity">
+        <activity android:name=".views.DriverAcceptRequestActivity" />
+        <activity android:name=".views.DriverRequestActivity" />
+        <activity android:name=".views.MainActivity" />
+        <activity android:name=".views.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,10 +31,9 @@
         </activity>
         <activity android:name=".views.SignUpActivity" />
         <activity android:name=".views.RiderRequestActivity" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAGmBxEjzU68YpgCNWsldO73dFcwnj0BT8" />
+            android:value="@string/API_KEY" />
     </application>
 
 </manifest>

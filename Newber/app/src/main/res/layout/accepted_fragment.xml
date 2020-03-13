@@ -63,7 +63,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:layout_margin="18dp"
         android:layout_weight="1"
         android:background="@color/colorBlack"
@@ -71,7 +71,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:layout_margin="2dp"
             android:layout_weight="1"
             android:background="@color/cardview_light_background"
@@ -132,21 +132,50 @@
                 android:clickable="true"
                 android:gravity="left"
                 android:text="johnsmiles@email.com" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/call_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:src="@drawable/ic_local_phone_white_24dp"
+                    android:visibility="gone">
+
+                </ImageButton>
+
+                <ImageButton
+                    android:id="@+id/email_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:src="@drawable/ic_email_white_24dp"
+                    android:visibility="gone">
+
+                </ImageButton>
+            </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="6"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/request_accepted_button"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/request_accepted_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

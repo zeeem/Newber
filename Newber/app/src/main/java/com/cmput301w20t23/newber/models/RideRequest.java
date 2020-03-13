@@ -1,41 +1,53 @@
 package com.cmput301w20t23.newber.models;
 
-import android.location.Location;
+import androidx.annotation.NonNull;
 
+import com.google.android.libraries.places.api.model.Place;
+
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Describes a request for a ride.
  *
- * @author Jessica D'Cunha, Gaurav Sekhar
+ * @author Jessica D'Cunha, Gaurav Sekhar, Ibrahim Aly
  */
-public class RideRequest {
-    private UUID requestId;
-    private Location start;
-    private Location end;
+public class RideRequest implements Serializable {
+    private String requestId;
+    private Location startLocation;
+    private Location endLocation;
     private RequestStatus status;
     private Driver driver;
     private Rider rider;
     private double cost;
 
+    public RideRequest() { }
+
     /**
      * Instantiates a new Ride request.
      *
-     * @param requestId the request id
-     * @param start     the starting location
-     * @param end       the end location
-     * @param status    the status of the request
-     * @param driver    the driver involved
-     * @param rider     the rider involved
-     * @param cost      the cost of the ride
+     * @param startLocation    the starting location
+     * @param endLocation      the end location
+     * @param rider      the rider involved
+     * @param cost          the cost of the ride
      */
-    public RideRequest(UUID requestId, Location start, Location end, RequestStatus status, Driver driver, Rider rider, double cost) {
-        this.requestId = requestId;
-        this.start = start;
-        this.end = end;
-        this.status = status;
-        this.driver = driver;
+    public RideRequest(Location startLocation, Location endLocation, Rider rider, double cost) {
+        this.requestId = UUID.randomUUID().toString();
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+        this.status = RequestStatus.PENDING;
         this.rider = rider;
+        this.driver = null;
+        this.cost = cost;
+    }
+
+    public RideRequest(String requestId, Location startLocation, Location endLocation, RequestStatus status, Rider rider, Driver driver, double cost) {
+        this.requestId = requestId;
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+        this.status = status;
+        this.rider = rider;
+        this.driver = driver;
         this.cost = cost;
     }
 
@@ -44,7 +56,7 @@ public class RideRequest {
      *
      * @return the request id
      */
-    public UUID getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
@@ -53,7 +65,7 @@ public class RideRequest {
      *
      * @param requestId the request id
      */
-    public void setRequestId(UUID requestId) {
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 
@@ -62,17 +74,17 @@ public class RideRequest {
      *
      * @return the starting location
      */
-    public Location getStart() {
-        return start;
+    public Location getStartLocation() {
+        return startLocation;
     }
 
     /**
      * Sets start.
      *
-     * @param start the starting location
+     * @param startLocation the starting location
      */
-    public void setStart(Location start) {
-        this.start = start;
+    public void setStartLocation(Location startLocation) {
+        this.startLocation = startLocation;
     }
 
     /**
@@ -80,17 +92,17 @@ public class RideRequest {
      *
      * @return the ending location
      */
-    public Location getEnd() {
-        return end;
+    public Location getEndLocation() {
+        return endLocation;
     }
 
     /**
      * Sets end.
      *
-     * @param end the ending location
+     * @param endLocation the ending location
      */
-    public void setEnd(Location end) {
-        this.end = end;
+    public void setEndLocation(Location endLocation) {
+        this.endLocation = endLocation;
     }
 
     /**
@@ -163,5 +175,11 @@ public class RideRequest {
      */
     public void setCost(double cost) {
         this.cost = cost;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Pick up at: " + startLocation.getName();
     }
 }

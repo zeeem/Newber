@@ -1,6 +1,5 @@
 package com.cmput301w20t23.newber.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,10 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
 
 /**
  * The Android Fragment that is shown when the user has a pending current ride request.
@@ -22,12 +24,18 @@ public class RequestPendingFragment extends Fragment {
     private RideRequest rideRequest;
 
     /**
+     * Instantiate User and RideRequest controllers
+     */
+    private RideController rideController = new RideController();
+    private UserController userController = new UserController(this.getContext());
+
+    /**
      * Instantiates a new RequestPendingFragment.
      *
      * @param request the current request
      */
     public RequestPendingFragment(RideRequest request) {
-        rideRequest = request;
+        this.rideRequest = request;
     }
 
     @Override
@@ -43,8 +51,9 @@ public class RequestPendingFragment extends Fragment {
         Button cancelRequestButton = view.findViewById(R.id.rider_pending_request_button);
 
         // Set view elements
-//        pickupLocationTextView.setText(rideRequest.getStart().getName());
-//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        System.out.println(rideRequest.getStartLocation());
+        pickupLocationTextView.setText(rideRequest.getStartLocation().getName());
+        dropoffLocationTextView.setText(rideRequest.getEndLocation().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         cancelRequestButton.setOnClickListener(new View.OnClickListener()
@@ -52,7 +61,12 @@ public class RequestPendingFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // TODO: remove request from firebase user and requests table
+                // Remove current request ID from firebase user entry
+                rideRequest.getRider().setCurrentRequestId("");
+                userController.updateUserCurrentRequestId(rideRequest.getRider());
+
+                // Remove ride request entry from firebase
+                rideController.removeRideRequest(rideRequest);
             }
         });
         return view;

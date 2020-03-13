@@ -9,8 +9,21 @@ import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
 import com.cmput301w20t23.newber.controllers.NameOnClickListener;
+import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.controllers.UserController;
+import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.Rating;
+import com.cmput301w20t23.newber.models.RequestStatus;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.CountDownLatch;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -22,6 +35,12 @@ public class RequestOfferedFragment extends Fragment {
 
     private RideRequest rideRequest;
     private String role;
+
+    /**
+     * Instantiate RideRequest controller
+     */
+    private RideController rideController = new RideController();
+    private UserController userController = new UserController(this.getContext());
 
     /**
      * Instantiates a new RequestOfferedFragment.
@@ -39,7 +58,7 @@ public class RequestOfferedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // View for this fragment
-        View view = inflater.inflate(R.layout.pending_fragment, container, false);
+        View view = inflater.inflate(R.layout.offered_fragment, container, false);
 
         // Get view elements
         TextView pickupLocationTextView = view.findViewById(R.id.pickup_location);
@@ -52,14 +71,14 @@ public class RequestOfferedFragment extends Fragment {
         Button declineOfferButton = view.findViewById(R.id.rider_decline_offer_button);
 
         // Set view elements
-//        pickupLocationTextView.setText(rideRequest.getStart().getName());
-//        dropoffLocationTextView.setText(rideRequest.getEnd().getName());
+        pickupLocationTextView.setText(rideRequest.getStartLocation().getName());
+        dropoffLocationTextView.setText(rideRequest.getEndLocation().getName());
         fareTextView.setText(Double.toString(rideRequest.getCost()));
 
         switch (role) {
             case "Rider":
                 // Set values of info box
-                nameTextView.setText(rideRequest.getDriver().getFirstName() + " " + rideRequest.getDriver().getLastName());
+                nameTextView.setText(rideRequest.getDriver().getUsername());
                 phoneTextView.setText(rideRequest.getDriver().getPhone());
                 emailTextView.setText(rideRequest.getDriver().getEmail());
 
@@ -70,6 +89,8 @@ public class RequestOfferedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: Leave driver attached to request on firebase and set request status to ACCEPTED
+                        rideRequest.setStatus(RequestStatus.ACCEPTED);
+                        rideController.updateRideRequest(rideRequest);
                     }
                 });
 
@@ -79,24 +100,32 @@ public class RequestOfferedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // TODO: Request status returns to PENDING and remove driver from request on Firebase
+                        rideRequest.setStatus(RequestStatus.PENDING);
+                        rideRequest.getDriver().setCurrentRequestId("");
+                        userController.updateUserCurrentRequestId(rideRequest.getDriver());
+                        rideRequest.setDriver(null);
+                        rideController.updateRideRequest(rideRequest);
                     }
                 });
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getDriver()));
                 break;
 
             case "Driver":
                 // Set values of info box
-                nameTextView.setText(rideRequest.getRider().getFirstName() + " " + rideRequest.getRider().getLastName());
+                nameTextView.setText(rideRequest.getRider().getUsername());
                 phoneTextView.setText(rideRequest.getRider().getPhone());
                 emailTextView.setText(rideRequest.getRider().getEmail());
 
                 // Show decline/accept offer buttons only for Riders
                 acceptOfferButton.setVisibility(View.INVISIBLE);
                 declineOfferButton.setVisibility(View.INVISIBLE);
+
+                // Bring up profile when name is clicked
+                nameTextView.setOnClickListener(new NameOnClickListener(role, rideRequest.getRider()));
                 break;
         }
-
-        // Bring up profile when name is clicked
-        nameTextView.setOnClickListener(new NameOnClickListener(role));
 
         return view;
     }

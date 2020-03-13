@@ -9,6 +9,9 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.Rider;
+import com.cmput301w20t23.newber.models.User;
 
 /**
  * The Android Fragment that is shown when the user doesn't have a current ride request.
@@ -17,15 +20,19 @@ import com.cmput301w20t23.newber.R;
  */
 public class NoRequestFragment extends Fragment {
     private String role;
+    private User user;
 
     /**
      * Instantiates a new NoRequestFragment.
      *
      * @param role the user's role
      */
-    public NoRequestFragment(String role) {
+    public NoRequestFragment(String role, User user) {
         this.role = role;
+        this.user = user;
     }
+
+    public NoRequestFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +51,7 @@ public class NoRequestFragment extends Fragment {
                     public void onClick(View v)
                     {
                         Intent intent = new Intent(getActivity(), RiderRequestActivity.class);
+                        intent.putExtra("rider", (Rider)user);
                         startActivity(intent);
                     }
                 });
@@ -55,9 +63,9 @@ public class NoRequestFragment extends Fragment {
                     @Override
                     public void onClick(View v)
                     {
-                        // Start DriverSearchForRequest activity
-//                        Intent intent = new Intent(getActivity(), RiderRequestActivity.class);
-//                        startActivity(intent);
+                        Intent intent = new Intent(getActivity(), DriverRequestActivity.class);
+                        intent.putExtra("driver", (Driver)user);
+                        startActivity(intent);
                     }
                 });
                 break;

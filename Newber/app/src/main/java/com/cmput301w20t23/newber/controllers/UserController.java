@@ -147,6 +147,10 @@ public class UserController {
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .child("role").setValue(role);
 
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("currentRequestId").setValue("");
+
                     // if the user to be created is a driver, create upvotes and downvotes fields in database
                     if (role.equals("Driver")) {
                         FirebaseDatabase.getInstance().getReference("drivers")
@@ -236,5 +240,27 @@ public class UserController {
                     }
                 });
         ref.child("phone").setValue(phone);
+    }
+
+    /**
+     * Updates user entry with new currentRequestId
+     * @param user user model
+     */
+    public void updateUserCurrentRequestId(User user) {
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(user.getUid())
+                .child("currentRequestId")
+                .setValue(user.getCurrentRequestId());
+    }
+
+    /**
+     * Updates user entry with contents of the user
+     * @param user user model
+     */
+    public void removeUserCurrentRequestId(User user) {
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(user.getUid())
+                .child("currentRequestId")
+                .setValue("");
     }
 }

@@ -1,6 +1,8 @@
 package com.cmput301w20t23.newber.views;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -13,7 +15,19 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.models.Driver;
+import com.cmput301w20t23.newber.models.Rating;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
+import com.cmput301w20t23.newber.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * The Android Activity that acts as the main user screen of the app.
@@ -21,59 +35,147 @@ import com.cmput301w20t23.newber.models.RideRequest;
  * @author Amy Hou
  */
 public class MainActivity extends AppCompatActivity {
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
     /**
      * The user's current ride request.
      */
-    RideRequest currRequest; // To be updated when querying db
-    /**
-     * The user's role.
-     */
-    String role = "Rider"; // To be updated when querying db
+    private RideRequest currRequest; // To be updated when querying db
+
+    private String firstName, lastName, username, phone, email, uId, currentRequestId, role;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: Get from DB current user and current ride request and save as local objects
+        // Get current userID
+        String userId = mAuth.getCurrentUser().getUid();
 
+        System.out.println(userId);
+
+        // Get User object using Firebase users table
+        database.getReference("users")
+                .child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                firstName = dataSnapshot.child("firstName").getValue(String.class);
+                lastName = dataSnapshot.child("lastName").getValue(String.class);
+                username = dataSnapshot.child("username").getValue(String.class);
+                phone = dataSnapshot.child("phone").getValue(String.class);
+                email = dataSnapshot.child("email").getValue(String.class);
+                uId = mAuth.getCurrentUser().getUid();
+                currentRequestId = dataSnapshot.child("currentRequestId").getValue(String.class);
+                role = dataSnapshot.child("role").getValue(String.class);
+                System.out.println("changed");
+
+                switch (role) {
+                    case "Rider":
+                        user = new Rider(firstName, lastName, username, phone, email, uId, currentRequestId);
+                        break;
+
+                    case "Driver":
+                        user = new Driver(firstName, lastName, username, phone, email, uId, currentRequestId, null);
+                        database.getReference("drivers").child(uId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Rating rating = dataSnapshot.getValue(Rating.class);
+                                // append rating
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        break;
+                }
+                System.out.println(MainActivity.this.user.getEmail());
+                // Use User.currRequestId to get RideRequest object from requests table
+                if (currentRequestId != null && !currentRequestId.isEmpty()) {
+                    System.out.println("currReqId not null");
+                    database.getReference("rideRequests")
+                            .child(currentRequestId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                currRequest = dataSnapshot.getValue(RideRequest.class);
+//                                updateUsers();
+                                displayFragment();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                } else {
+                    currRequest = null;
+                    displayFragment();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void displayFragment() {
         Fragment riderFragment = null;
         TextView statusBanner = findViewById(R.id.main_status_banner);
+
+        System.out.println("the role is: " + role);
+        System.out.println(user.toString());
 
         if (currRequest == null) {
             // if current user has no request attached, use "no current request" fragment
             statusBanner.setText("No Request");
             statusBanner.setBackgroundColor(Color.LTGRAY);
-            riderFragment = new NoRequestFragment(role);
+            riderFragment = new NoRequestFragment(role, user);
         }
         else {
             switch (currRequest.getStatus()) {
                 case PENDING:
-                    statusBanner.setText("Requested");
-                    statusBanner.setBackgroundColor(Color.RED);
-                    riderFragment = new RequestPendingFragment(currRequest);
+                    if (role.matches("Rider")) {
+                        statusBanner.setText("Requested");
+                        statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerRed));
+                        riderFragment = new RequestPendingFragment(currRequest);
+                    } else {
+                        riderFragment = new NoRequestFragment(role, user);
+                    }
+                    break;
                 case OFFERED:
                     statusBanner.setText("Offered");
-                    statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerOrange));
+                    System.out.println(user);
                     riderFragment = new RequestOfferedFragment(currRequest, role);
+                    break;
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
-                    statusBanner.setBackgroundColor(Color.GREEN);
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerGreen));
                     riderFragment = new RequestAcceptedFragment(currRequest, role);
+                    break;
                 case IN_PROGRESS:
                     statusBanner.setText("In Progress");
-                    statusBanner.setBackgroundColor(Color.YELLOW);
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerYellow));
                     riderFragment = new RequestInProgressFragment(currRequest, role);
+                    break;
                 case COMPLETED:
                     statusBanner.setText("Completed");
-                    statusBanner.setBackgroundColor(Color.CYAN);
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerBlue));
                     riderFragment = new RequestCompletedFragment(currRequest);
             }
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.rider_request_details, riderFragment);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     @Override
