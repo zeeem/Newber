@@ -10,8 +10,11 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import com.cmput301w20t23.newber.R;
+import com.cmput301w20t23.newber.controllers.RideController;
+import com.cmput301w20t23.newber.controllers.UserController;
 import com.cmput301w20t23.newber.models.Driver;
 import com.cmput301w20t23.newber.models.RideRequest;
+import com.cmput301w20t23.newber.models.Rider;
 
 /**
  * The Android Fragment that is shown when the user has a completed current ride request.
@@ -21,6 +24,9 @@ import com.cmput301w20t23.newber.models.RideRequest;
 public class RequestCompletedFragment extends Fragment {
 
     private RideRequest rideRequest;
+
+    private RideController rideController;
+    private UserController userController = new UserController(this.getContext());
 
     /**
      * Instantiates a new RequestCompletedFragment.
@@ -62,6 +68,15 @@ public class RequestCompletedFragment extends Fragment {
             public void onClick(View v)
             {
                 // TODO: remove request from firebase user and the requests table
+                Driver tempDriver = rideRequest.getDriver();
+                Rider tempRider = rideRequest.getRider();
+                tempDriver.setCurrentRequestId("");
+                tempRider.setCurrentRequestId("");
+
+                // Update currentRequestId fields of driver
+                userController.updateUserCurrentRequestId(tempDriver);
+                // Update currentRequestId fields of rider
+                userController.updateUserCurrentRequestId(tempRider);
             }
         });
         return view;
