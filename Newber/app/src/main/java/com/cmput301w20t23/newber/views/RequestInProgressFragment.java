@@ -1,5 +1,6 @@
 package com.cmput301w20t23.newber.views;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +85,9 @@ public class RequestInProgressFragment extends Fragment {
                 nameTextView.setText(rideRequest.getRider().getUsername());
                 phoneTextView.setText(rideRequest.getRider().getPhone());
                 emailTextView.setText(rideRequest.getRider().getEmail());
+
+                completeButton.setBackgroundColor(Color.CYAN);
+                completeButton.setText("Complete");
 
                 completeButton.setOnClickListener(new View.OnClickListener()
                 {

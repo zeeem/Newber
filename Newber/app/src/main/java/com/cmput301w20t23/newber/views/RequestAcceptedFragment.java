@@ -89,7 +89,8 @@ public class RequestAcceptedFragment extends Fragment {
                     public void onClick(View v)
                     {
                         // If rider, remove driver from request and set status to PENDING
-                        userController.removeUserCurrentRequestId(rideRequest.getDriver());
+                        rideRequest.getDriver().setCurrentRequestId("");
+                        userController.updateUserCurrentRequestId(rideRequest.getDriver());
                         rideRequest.setDriver(null);
                         rideRequest.setStatus(RequestStatus.PENDING);
                         rideController.updateRideRequest(rideRequest);
@@ -104,14 +105,14 @@ public class RequestAcceptedFragment extends Fragment {
                 callButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToCallScreen();
+                        goToCallScreen(rideRequest.getDriver());
                     }
                 });
 
                 emailButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToMailScreen();
+                        goToMailScreen(rideRequest.getDriver());
                     }
                 });
 
@@ -151,9 +152,9 @@ public class RequestAcceptedFragment extends Fragment {
      * Opens Android call screen and populates it with the driver's phone number when the
      * appropriate button is clicked.
      */
-    public void goToCallScreen() {
+    public void goToCallScreen(User user) {
         // TODO: replace dummy phone with driver's phone
-        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "7801234567"));
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + user.getPhone()));
         this.startActivity(callIntent);
     }
 
@@ -161,10 +162,10 @@ public class RequestAcceptedFragment extends Fragment {
      * Opens Android mail screen and populates it with the driver's email address when the
      * appropriate button is clicked.
      */
-    public void goToMailScreen() {
+    public void goToMailScreen(User user) {
         // TODO: replace dummy email with driver's email
         Intent mailIntent = new Intent(Intent.ACTION_SEND);
-        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"driver@example.com"});
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {user.getEmail()});
         mailIntent.setType("message/rfc822");
         this.startActivity(Intent.createChooser(mailIntent,
                 "Send email using: "));
