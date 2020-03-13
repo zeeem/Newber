@@ -1,18 +1,25 @@
 package com.cmput301w20t23.newber;
 
+
+import android.app.Instrumentation;
 import android.content.Context;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.cmput301w20t23.newber.controllers.UserController;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class UserControllerTest {
     private UserController testController;
     private Context testContext;
     private FirebaseAuth testAuth;
+    private InstrumentationRegistry testReg;
+    private Instrumentation testIn;
 
     /**
      * creates a context, sets it to the current app context, and sets the test controller's
@@ -21,7 +28,8 @@ public class UserControllerTest {
      */
     @Before
     public void setup(){
-        testContext = testContext.getApplicationContext();
+        testIn = testReg.getInstrumentation();
+        testContext = testIn.getTargetContext();
         testController = new UserController(testContext);
         testAuth = testAuth.getInstance();
     }

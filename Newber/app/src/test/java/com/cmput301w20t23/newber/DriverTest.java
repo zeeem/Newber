@@ -45,21 +45,28 @@ public class DriverTest {
     public void testSetAndGetRating(){
         Rating result = testDriver.getRating();
         Rating expected = new Rating(0, 0);
-        assertEquals(true, expected.equals(result));
+        assertEquals(true, expected.getUpvotes() == result.getUpvotes() && expected.getDownvotes() == result.getDownvotes());
 
         Rating newRating = new Rating(1, 6);
         testDriver.setRating(newRating);
         expected.setUpvotes(1);
         expected.setDownvotes(6);
         result = testDriver.getRating();
-        assertEquals(true, expected.equals(result));
+        assertEquals(true, expected.getUpvotes() == result.getUpvotes() && expected.getDownvotes() == result.getDownvotes());
     }
 
     @Test
     public void testSetAndGetCurrentRequest(){
+        testDriver.setCurrentRequest(testRequest);
         RideRequest result = testDriver.getCurrentRequest();
         RideRequest expected = testRequest;
-        assertEquals(true, expected.equals(result));
+        assertEquals(true, expected.getRequestId() == result.getRequestId()
+        && expected.getStartLocation() == result.getStartLocation()
+        && expected.getEndLocation() == result.getEndLocation()
+        && expected.getStatus() == result.getStatus()
+        && expected.getRiderUid() == result.getRiderUid()
+        && expected.getDriverUid() == result.getDriverUid()
+        && expected.getCost() == result.getCost());
 
         expected.setRequestId("321");
         expected.setStartLocation(testEnd);
@@ -71,7 +78,13 @@ public class DriverTest {
 
         testDriver.setCurrentRequest(expected);
         result = testDriver.getCurrentRequest();
-        assertEquals(true, expected.equals(result));
+        assertEquals(true, expected.getRequestId() == result.getRequestId()
+                && expected.getStartLocation() == result.getStartLocation()
+                && expected.getEndLocation() == result.getEndLocation()
+                && expected.getStatus() == result.getStatus()
+                && expected.getRiderUid() == result.getRiderUid()
+                && expected.getDriverUid() == result.getDriverUid()
+                && expected.getCost() == result.getCost());
 
     }
 }
