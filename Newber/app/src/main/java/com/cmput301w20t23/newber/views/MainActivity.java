@@ -2,6 +2,7 @@ package com.cmput301w20t23.newber.views;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 case PENDING:
                     if (role.matches("Rider")) {
                         statusBanner.setText("Requested");
-                        statusBanner.setBackgroundColor(Color.RED);
+                        statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerRed));
                         riderFragment = new RequestPendingFragment(currRequest);
                     } else {
                         riderFragment = new NoRequestFragment(role, user);
@@ -151,23 +152,23 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case OFFERED:
                     statusBanner.setText("Offered");
-                    statusBanner.setBackgroundColor(Color.rgb(255,165,0)); // orange
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerOrange));
                     System.out.println(user);
                     riderFragment = new RequestOfferedFragment(currRequest, role);
                     break;
                 case ACCEPTED:
                     statusBanner.setText("Accepted");
-                    statusBanner.setBackgroundColor(Color.GREEN);
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerGreen));
                     riderFragment = new RequestAcceptedFragment(currRequest, role);
                     break;
                 case IN_PROGRESS:
                     statusBanner.setText("In Progress");
-                    statusBanner.setBackgroundColor(Color.YELLOW);
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerYellow));
                     riderFragment = new RequestInProgressFragment(currRequest, role);
                     break;
                 case COMPLETED:
                     statusBanner.setText("Completed");
-                    statusBanner.setBackgroundColor(Color.CYAN);
+                    statusBanner.setBackgroundColor(ContextCompat.getColor(this, R.color.bannerBlue));
                     riderFragment = new RequestCompletedFragment(currRequest);
             }
         }

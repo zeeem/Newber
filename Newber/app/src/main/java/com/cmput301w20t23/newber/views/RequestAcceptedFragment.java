@@ -21,6 +21,7 @@ import com.cmput301w20t23.newber.models.RideRequest;
 import com.cmput301w20t23.newber.models.Rider;
 import com.cmput301w20t23.newber.models.User;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -121,7 +122,7 @@ public class RequestAcceptedFragment extends Fragment {
                 break;
 
             case "Driver": // Rider Picked Up button
-                button.setBackgroundColor(Color.YELLOW);
+                button.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.bannerYellow));
                 button.setText("Rider picked up");
 
                 // Set values of info box
