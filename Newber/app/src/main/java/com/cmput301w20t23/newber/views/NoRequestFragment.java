@@ -64,7 +64,6 @@ public class NoRequestFragment extends Fragment {
                     public void onClick(View v)
                     {
                         Intent intent = new Intent(getActivity(), DriverRequestActivity.class);
-                        System.out.println("NoRequestFragment " + user.getUsername());
                         intent.putExtra("driver", (Driver)user);
                         startActivity(intent);
                     }

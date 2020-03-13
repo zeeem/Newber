@@ -43,8 +43,6 @@ public class DriverAcceptRequestActivity extends AppCompatActivity implements On
         setContentView(R.layout.activity_driver_accept_request);
         request = (RideRequest) getIntent().getSerializableExtra("request");
         driver = (Driver) getIntent().getSerializableExtra("driver");
-
-        System.out.println("DriverAcceptRequestActivity " + driver.getUsername());
         rideController = new RideController();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

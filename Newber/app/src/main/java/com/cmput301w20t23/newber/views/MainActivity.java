@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 currRequest = dataSnapshot.getValue(RideRequest.class);
+//                                updateUsers();
                                 displayFragment();
                             }
                         }
