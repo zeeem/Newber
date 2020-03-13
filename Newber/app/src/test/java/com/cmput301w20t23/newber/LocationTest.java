@@ -1,13 +1,12 @@
 package com.cmput301w20t23.newber;
 
 import com.cmput301w20t23.newber.models.Location;
-import com.cmput301w20t23.newber.models.Rating;
-import com.google.android.libraries.places.api.model.Place;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class LocationTest {
     private Location testLocation;
@@ -52,7 +51,7 @@ public class LocationTest {
 
     @Test
     public void testToString() {
-        String expected = "City: 12.345, 98.765";
+        String expected = "City";
         assertEquals(expected, testLocation.toString());
     }
 }
