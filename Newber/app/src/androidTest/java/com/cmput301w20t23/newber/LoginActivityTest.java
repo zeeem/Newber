@@ -6,11 +6,9 @@ import android.widget.TextView;
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.platform.app.InstrumentationRegistry;
-
-import com.cmput301w20t23.newber.views.LoginActivity;
-
 import androidx.test.rule.ActivityTestRule;
 
+import com.cmput301w20t23.newber.views.LoginActivity;
 import com.cmput301w20t23.newber.views.MainActivity;
 import com.robotium.solo.Solo;
 
@@ -22,7 +20,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for LoginActivity.
@@ -64,7 +62,7 @@ public class LoginActivityTest {
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
 
         // enter invalid login credentials and attempt login
-        solo.enterText((EditText) solo.getView(R.id.email_login), "testUser@test.com");
+        solo.enterText((EditText) solo.getView(R.id.email_login), "testLogin@test.com");
         solo.enterText((EditText) solo.getView(R.id.password_login), "incorrectPassword");
         solo.clickOnButton("Login");
 
@@ -93,7 +91,7 @@ public class LoginActivityTest {
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
 
         // enter valid login credentials and attempt login
-        solo.enterText((EditText) solo.getView(R.id.email_login), "testUser@test.com");
+        solo.enterText((EditText) solo.getView(R.id.email_login), "testLogin@test.com");
         solo.enterText((EditText) solo.getView(R.id.password_login), "correctPassword");
         solo.clickOnButton("Login");
 
