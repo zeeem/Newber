@@ -37,16 +37,16 @@ public class RequestFragmentTest {
     }
 
     @Test
-    public void testRideRequest(){
+    public void testRequestFragments(){
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
 
-        //login
+        //login as rider
         solo.enterText((EditText) solo.getView(R.id.email_login), "testLogin@test.com");
         solo.enterText((EditText) solo.getView(R.id.password_login), "correctPassword");
         solo.clickOnView(solo.getView(R.id.login_button));
         solo.clickOnView((solo.getView(R.id.create_request_button)));
         //need to sleep so map loads
-        solo.sleep(3000);
+        solo.sleep(2500);
 
         //search
         solo.clickOnView(solo.getView(R.id.from_map_button));
@@ -56,22 +56,75 @@ public class RequestFragmentTest {
         solo.clickOnView(solo.getView(R.id.confirm_ride_request_button));
 
 
-        //check
+        //check request was made
         TextView text;
         text = (TextView) solo.getView(R.id.pickup_location);
         assertEquals("8067 104 Ave NW, Edmonton, AB T5J 4X1, Canada", text.getText());
         text = (TextView) solo.getView(R.id.dropoff_location);
         assertEquals("8067 104 Ave NW, Edmonton, AB T5J 4X1, Canada", text.getText());
 
+        //logout of rider and into driver
+        solo.clickOnView(solo.getView(R.id.profile));
+        solo.clickOnView(solo.getView(R.id.logout));
+        solo.sleep(1000);
+        solo.enterText((EditText) solo.getView(R.id.email_login), "testDriver@drive.com");
+        solo.enterText((EditText) solo.getView(R.id.password_login), "password");
+        solo.clickOnView(solo.getView(R.id.login_button));
+        solo.clickOnView(solo.getView(R.id.create_request_button));
+
+        //accept ride
+        solo.sleep(2500);
+        solo.clickOnView(solo.getView(R.id.driver_map_button));
+        solo.clickLongOnView(solo.getView(R.id.map));
+        solo.clickInList(0);
+        solo.clickOnView(solo.getView(R.id.confirm_ride_request_button));
+
+        //check driver found request
+        text = (TextView) solo.getView(R.id.pickup_location);
+        assertEquals("8067 104 Ave NW, Edmonton, AB T5J 4X1, Canada", text.getText());
+        text = (TextView) solo.getView(R.id.dropoff_location);
+        assertEquals("8067 104 Ave NW, Edmonton, AB T5J 4X1, Canada", text.getText());
+
+        //logout from driver, into rider
+        solo.clickOnView(solo.getView(R.id.profile));
+        solo.clickOnView(solo.getView(R.id.logout));
+        solo.sleep(1000);
+        solo.enterText((EditText) solo.getView(R.id.email_login), "testLogin@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password_login), "correctPassword");
+        solo.clickOnView(solo.getView(R.id.login_button));
+        solo.clickOnView(solo.getView(R.id.rider_accept_offer_button));
+
+        //check rider recieved offer
+        text = (TextView) solo.getView(R.id.rider_main_driver_name);
+        assertEquals("testUser2", text.getText());
+        text = (TextView) solo.getView(R.id.rider_main_driver_email);
+        assertEquals("testDriver@drive.com", text.getText());
+
+        //logout, back to driver
+        solo.clickOnView(solo.getView(R.id.profile));
+        solo.clickOnView(solo.getView(R.id.logout));
+        solo.sleep(1000);
+        solo.enterText((EditText) solo.getView(R.id.email_login), "testDriver@drive.com");
+        solo.enterText((EditText) solo.getView(R.id.password_login), "password");
+        solo.clickOnView(solo.getView(R.id.login_button));
+
+
+        //commence ride
+        solo.clickOnView(solo.getView(R.id.request_accepted_button));
+        solo.sleep(100);
+        solo.clickOnView(solo.getView(R.id.driver_complete_ride_button));
+        solo.clickOnView(solo.getView(R.id.rider_complete_ride_button));
+
+        //ensure that ride is finished
+        text = (TextView) solo.getView(R.id.driver_status);
+        assertEquals("You currently have no ride request.", text.getText());
+
+
         //close and logout
-        solo.clickOnView(solo.getView(R.id.rider_pending_request_button));
         //sleep so firebase updates
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.profile));
         solo.clickOnView(solo.getView(R.id.logout));
 
-
-
     }
-
 }
